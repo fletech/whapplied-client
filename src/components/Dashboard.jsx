@@ -22,6 +22,7 @@ const Dashboard = () => {
           className="mt-4 rounded-full w-16 h-16"
         />
       )}
+      <p>{user.spreadSheetId}</p>
     </div>
   );
 };

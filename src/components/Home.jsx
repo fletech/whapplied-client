@@ -1,9 +1,7 @@
 import React from "react";
-import LoginButton from "./LoginButton";
-import { useAuth } from "../hooks/useAuth";
+import AuthButton from "./AuthButton";
 
 const Home = () => {
-  const { isLoggedIn } = useAuth();
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
@@ -13,7 +11,7 @@ const Home = () => {
         emails.
       </p>
       <span>Easy, sign-in with your Google account and you will see...</span>
-      {!isLoggedIn && <LoginButton />}
+      <AuthButton />
     </div>
   );
 };

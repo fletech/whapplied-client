@@ -52,7 +52,6 @@ import { useAuth } from "../hooks/useAuth";
 const Login = () => {
   // const context = useContext(SessionManager);
   const { isLoggedIn } = useAuth();
-  console.log(isLoggedIn);
 
   return (
     <div className="login flex items-center justify-start  w-full">

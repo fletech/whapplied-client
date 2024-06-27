@@ -31,11 +31,7 @@ export class AuthService implements IAuthService {
           "Content-Type": "application/json",
         },
       });
-      if (response.ok) {
-        const data = await response.json();
-        return data.user as IUser;
-      }
-      return null;
+      return response.ok ? ((await response.json()).user as IUser) : null;
     } catch (error) {
       console.error("Error checking auth status:", error);
       return null;

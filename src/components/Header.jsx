@@ -1,16 +1,20 @@
 import React from "react";
-import Login from "./Login";
 import { useAuth } from "../hooks/useAuth";
+import AuthButton from "./AuthButton";
 
 const Header = () => {
   const { isLoggedIn } = useAuth();
+
   return (
-    <header className="Header  w-full flex justify-between items-center">
+    <header className="Header w-full flex justify-between items-center">
       <div className="w-auto h-auto">
         <img src="/logo.svg" alt="logo" className="w-[40px] h-full" />
       </div>
       <div className="flex items-center justify-between py-3">
-        <Login />
+        <AuthButton
+          isLoggedIn={isLoggedIn}
+          label={isLoggedIn ? "Logout" : "Login"}
+        />
         <button className="focus:outline-none lg:hidden">
           <svg
             className="w-6 h-6"
