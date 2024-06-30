@@ -1,43 +1,27 @@
-import { useState, useEffect, useCallback, useContext } from "react";
-import { IAuthService, ISessionManager, IUser } from "../types/interfaces";
+import { useEffect, useCallback, useContext } from "react";
+import { IAuthService, ISessionContext, IUser } from "../types/interfaces";
 import { AuthService } from "../services/authService";
-import { SessionManager } from "../services/sessionManager";
+
 import { useNavigate } from "react-router-dom";
-import { SessionContext } from "../context/sessionContext";
+import { SessionContext } from "../context/sessionContext.jsx";
 
 const auth = new AuthService();
-const session = new SessionManager();
 
-export const useAuth = (
-  authService: IAuthService = auth,
-  sessionManager: ISessionManager = session
-) => {
+export const useAuth = (authService: IAuthService = auth) => {
   const { updateSessionState } = useContext(SessionContext);
-  const [authState, setAuthState] = useState<{
-    isLoggedIn: boolean;
-    user: IUser | null;
-  }>(sessionManager.getState());
 
   const navigate = useNavigate();
 
-  const updateAuthState = useCallback(
-    (isLoggedIn: boolean, user: IUser | null) => {
-      setAuthState({ isLoggedIn, user });
-      sessionManager.setState({ isLoggedIn, user });
-    },
-    [sessionManager]
-  );
-
   const checkAuthStatus = useCallback(async () => {
     const userData = await authService.checkAuthStatus();
-    updateAuthState(!!userData, userData);
+
     updateSessionState({ user: userData });
     const storageData = {
       accessToken: userData?.accessToken,
       spreadSheetId: userData?.spreadSheetId,
     };
     localStorage.setItem("user", JSON.stringify(storageData));
-  }, [authService, updateAuthState]);
+  }, [authService]);
 
   useEffect(() => {
     checkAuthStatus();
@@ -55,5 +39,5 @@ export const useAuth = (
     navigate("/");
   }, [authService, checkAuthStatus, navigate]);
 
-  return { ...authState, login, logout, checkAuthStatus };
+  return { login, logout, checkAuthStatus };
 };

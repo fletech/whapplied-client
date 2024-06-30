@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { SessionContext } from "../context/sessionContext";
 
@@ -161,7 +160,7 @@ const Dashboard = () => {
             <tr>
               {data &&
                 data[0].slice(1).map((header) => {
-                  return <th>{header}</th>;
+                  return <th key={header}>{header}</th>;
                 })}
             </tr>
           </thead>

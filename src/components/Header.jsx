@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
-import { useAuth } from "../hooks/useAuth";
 import AuthButton from "./AuthButton";
-import { SessionContext } from "../context/sessionContext";
+// import { SessionContext } from "../context/sessionContext";
 
 const Header = () => {
-  const { sessionState } = useContext(SessionContext);
-  const isLoggedIn = sessionState.user !== null;
+  // const { sessionState } = useContext(SessionContext);
 
   return (
     <header className="Header w-full flex justify-between items-center">
@@ -13,10 +11,7 @@ const Header = () => {
         <img src="/logo.svg" alt="logo" className="w-[40px] h-full" />
       </div>
       <div className="flex items-center justify-between py-3">
-        <AuthButton
-          isLoggedIn={isLoggedIn}
-          label={isLoggedIn ? "Logout" : "Login"}
-        />
+        <AuthButton />
         <button className="focus:outline-none lg:hidden">
           <svg
             className="w-6 h-6"
