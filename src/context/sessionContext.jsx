@@ -6,11 +6,7 @@ const SessionContext = createContext();
 // Componente proveedor del contexto
 const SessionProvider = ({ children }) => {
   // Definir el estado del contexto
-  const [sessionState, setSessionState] = useState({
-    // Aquí puedes inicializar los valores iniciales del estado
-    isLoggedIn: false,
-    user: null,
-  });
+  const [sessionState, setSessionState] = useState({ user: null, error: null });
 
   // Función para actualizar el estado del contexto
   const updateSessionState = (newState) => {

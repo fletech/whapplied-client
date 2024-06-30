@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { SessionContext } from "../context/sessionContext";
 
 const AuthButton = () => {
-  const { isLoggedIn, login, logout } = useAuth();
+  const { sessionState } = useContext(SessionContext);
+  const isLoggedIn = sessionState.user !== null;
+
+  const { login, logout } = useAuth();
   const action = isLoggedIn ? logout : login;
   const label = isLoggedIn ? "Logout" : "Login with Google";
 

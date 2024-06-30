@@ -3,6 +3,8 @@ export interface IUser {
   name: string;
   email: string;
   avatarUrl?: string;
+  accessToken: string;
+  spreadSheetId: string;
 }
 
 export interface IAuthService {

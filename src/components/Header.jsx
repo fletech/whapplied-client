@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useAuth } from "../hooks/useAuth";
 import AuthButton from "./AuthButton";
+import { SessionContext } from "../context/sessionContext";
 
 const Header = () => {
-  const { isLoggedIn } = useAuth();
+  const { sessionState } = useContext(SessionContext);
+  const isLoggedIn = sessionState.user !== null;
 
   return (
     <header className="Header w-full flex justify-between items-center">
