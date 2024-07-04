@@ -11,6 +11,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Berlin, Germany",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386610,
     rating: 5,
   },
@@ -22,6 +23,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Amsterdam, Netherlands",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386615,
     rating: 3,
   },
@@ -33,6 +35,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Paris, France",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386620,
     rating: 4,
   },
@@ -44,6 +47,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Zurich, Switzerland",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386625,
     rating: 5,
   },
@@ -55,6 +59,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Stockholm, Sweden",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386630,
     rating: 4,
   },
@@ -66,6 +71,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "London, UK",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386635,
     rating: 4,
   },
@@ -77,6 +83,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Oslo, Norway",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386640,
     rating: 5,
   },
@@ -88,6 +95,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Madrid, Spain",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386645,
     rating: 3,
   },
@@ -99,6 +107,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Vienna, Austria",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386650,
     rating: 4,
   },
@@ -110,6 +119,7 @@ const dumbData = [
     description: "Full stack developer",
     location: "Helsinki, Finland",
     status: "",
+    url: "https://www.innovatetech.com",
     date_applied: 1719386655,
     rating: 5,
   },
@@ -122,8 +132,57 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const [rowClicked, setRowClicked] = useState("");
+  const [tableHeaders, setTableHeaders] = useState([]);
+  const [hiddenItems, setHiddenItems] = useState([
+    "url",
+    "id",
+    "date_saved",
+    "description",
+  ]);
+  const [order, setOrder] = useState([
+    "date_applied",
+    "company",
+    "position",
+    "location",
+    "status",
+    "rating",
+  ]);
 
   const dataFetched = data.length > 0;
+
+  const useData = (headers, rawData) => {
+    const filteredHeaders = headers
+      .filter((header) => {
+        return !hiddenItems.includes(header);
+      })
+      .map((headerLowCase) => headerLowCase.toUpperCase().replace("_", " "));
+
+    const sortedData = rawData.map((row) => {
+      const shownContent = {};
+      const hiddenContent = {};
+      Object.keys(row).forEach((key) => {
+        let content = row[key];
+        if (key === "date_saved" || key === "date_applied") {
+          content = new Date(Number(row[key]) * 1000).toLocaleDateString();
+        }
+        if (hiddenItems.includes(key)) {
+          hiddenContent[key] = content;
+        } else {
+          shownContent[key] = content;
+        }
+      });
+
+      return { shownContent, hiddenContent };
+    });
+
+    return { filteredHeaders, sortedData };
+  };
+
+  const { filteredHeaders, sortedData } = useData(tableHeaders, data);
+
+  console.log("filteredHeaders", filteredHeaders);
+  console.log("sortedData", sortedData);
 
   useEffect(() => {
     if (!user) {
@@ -138,28 +197,18 @@ const Dashboard = () => {
           spreadSheetId: user.spreadSheetId,
         });
 
-        if (response.status == "200") {
-          setLoading(false);
-        }
-        let datita = response.data.data.values;
+        // if (response.status == "200") {
+        //   setLoading(false);
+        // }
 
-        const arrayOfArrays = dumbData.map((obj) => [
-          obj.id,
-          obj.date_saved,
-          obj.company,
-          obj.position,
-          obj.description,
-          obj.location,
-          obj.status,
-          obj.date_applied,
-          obj.rating,
-        ]);
+        // console.log(response);
+        let datita = response.data.data;
+        setTableHeaders(response.data.headers);
 
-        datita.push(...arrayOfArrays);
-        datita.push(...arrayOfArrays);
+        datita.push(...dumbData);
+        datita.push(...dumbData);
 
         setData(datita);
-        // setData(response.data.data.values);
       } catch (err) {
         console.error("Error fetching spreadsheet data:", err);
         setError("Failed to fetch data. Please try again later.");
@@ -171,36 +220,93 @@ const Dashboard = () => {
     getSpreadsheetData();
   }, [user]);
 
-  const formatTableHeaders = (data) => {
-    console.log(data[0]);
-    return data[0].slice(1).map((header) => {
+  const formatTableHeaders = () => {
+    return filteredHeaders.map((header, cellIndex) => {
+      // if (cellIndex === 7 || cellIndex === 0) {
+      //   return null;
+      // }
       return (
-        <th className=" px-4 py-4 text-left " key={header}>
-          {header.toUpperCase().replace("_", " ")}
+        <th className=" px-4 py-4 text-left z-20" key={header}>
+          {header}
+          {/* {header.toUpperCase().replace("_", " ")} */}
         </th>
       );
     });
   };
 
-  const formatTableRows = (data) => {
-    return data.slice(1).map((row, rowIndex) => {
+  const formatTableRows = () => {
+    return sortedData.map((rowData, rowIndex) => {
       return (
-        <tr className="m-2 " key={rowIndex}>
-          {row.slice(1).map((cell, cellIndex) => {
-            let content = cell;
-            if (cellIndex === 0 || cellIndex === 6) {
-              content = new Date(Number(cell) * 1000).toLocaleDateString();
-            }
-            return (
-              <td
-                className="border-b border-light-gray py-4 px-4 "
-                key={cellIndex}
-              >
-                {content}
-              </td>
-            );
-          })}
-        </tr>
+        <>
+          <tr
+            className={`m-2  relative h-full hover:bg-dark-sea-logo  cursor-pointer ${
+              rowClicked === rowData.hiddenContent.id ? "bg-dark-sea-logo" : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (rowClicked === rowData.hiddenContent.id) {
+                setRowClicked("");
+                return;
+              }
+              setRowClicked(rowData.hiddenContent.id);
+            }}
+            key={rowIndex}
+          >
+            {Object.keys(rowData.shownContent).map((cellHeader) => {
+              let content = rowData.shownContent[cellHeader];
+
+              if (cellHeader === "company") {
+                return (
+                  <td
+                    className="group border-b border-light-gray bg-light-sea-logo "
+                    key={cellHeader}
+                  >
+                    <a
+                      href={rowData.hiddenContent.url}
+                      target="_blank"
+                      className="group-hover:text-custom-blue flex items-center py-4 px-4 w-full h-full"
+                    >
+                      {content}
+                      <span className="group-hover:opacity-100 opacity-0 ml-2 -rotate-45">
+                        {"->"}
+                      </span>
+                    </a>
+                  </td>
+                );
+              }
+
+              return (
+                <td
+                  className={`border-b border-light-gray py-4 px-4 ${
+                    cellHeader == "rating" || cellHeader == "date_applied"
+                      ? "text-center"
+                      : "text-left"
+                  }`}
+                  key={cellHeader}
+                >
+                  {content}
+                </td>
+              );
+            })}
+            {/* <a
+            href={rowData.hiddenContent.url}
+            className="w-[40px] flex items-center justify-center bg-light-gray h-[40px] absolute top-[15%] -left-10 rounded-full "
+          >
+            {"->"}
+          </a> */}
+          </tr>
+          {
+            //corregir esto
+            // rowClicked === rowData.hiddenContent.id && (
+            //   <div className=" bg-dark-gray px-8  z-30 left-0">
+            //     <div className="absolute left-0 w-full bg-dark-slate-gray z-30 h-[50vh]">
+            //       {rowData.hiddenContent.description}
+            //     </div>
+            //   </div>
+            // )
+          }
+        </>
       );
     });
   };
@@ -211,26 +317,28 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">{error}</div>
+      <div className="flex justify-center items-center h-full">{error}</div>
     );
   }
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">Loading</div>
+      <div className="flex justify-center items-center h-full">Loading</div>
     );
   }
 
   return (
     <section className="Dashboard">
       <div className="max-w-screen  ">
-        <table className="pr-8  text-dark-slate-gray table-auto w-full rounded-t-xl">
+        <table className="pr-8 table-auto text-soft-black w-full rounded-sm border-collapse relative">
           {/* <caption className="text-center text-sm font-light mb-4 caption-top">
             Job Applications
           </caption> */}
-          <thead className=" sticky top-[10vh]  rounded-xl  bg-light-gray ">
-            <tr className="">{dataFetched && formatTableHeaders(data)}</tr>
+          <thead className=" sticky top-[10vh]  rounded-xl bg-light-gray z-10 opacity-90  border-b border-dark-cyan">
+            <tr className="relative">{dataFetched && formatTableHeaders()}</tr>
           </thead>
-          <tbody>{dataFetched && formatTableRows(data)}</tbody>
+          <tbody className="w-full relative">
+            {dataFetched && formatTableRows()}
+          </tbody>
         </table>
       </div>
     </section>

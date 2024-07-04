@@ -4,6 +4,7 @@ import Header from "./Header";
 import { SessionContext } from "../context/sessionContext";
 import { Link } from "react-router-dom";
 import AuthButton from "./AuthButton";
+import { RiStackFill } from "react-icons/ri";
 
 const Layout = ({ children }) => {
   const { sessionState } = useContext(SessionContext);
@@ -15,11 +16,17 @@ const Layout = ({ children }) => {
       <Header height={`h-[10vh]`} />
       <article className="Layout-content flex min-h-[100vh] h-full">
         {isLogged && (
-          <aside className="Layout-sidebar w-[200px] h-[full] border-r border-r-light-gray">
+          <aside className="Layout-sidebar w-[200px] h-[full] border-r border-r-light-gray drop-shadow-lg">
             <div className="sticky pt-[14vh] h-[100vh] w-[80%] left-8 top-0 pb-10 flex flex-col justify-between items-center">
-              <Link to="/dashboard" className="text-dodger-blue ">
-                Overview
-              </Link>
+              <div className="w-full flex flex-col items-start justify-start">
+                <Link
+                  to="/dashboard"
+                  className="hover:text-custom-blue text-soft-black flex items-center  w-full"
+                >
+                  <RiStackFill />
+                  <p className="ml-2">Overview</p>
+                </Link>
+              </div>
               <div className="flex flex-col items-center">
                 <div className="flex items-center w-full justify-center mb-4">
                   <img
@@ -35,7 +42,7 @@ const Layout = ({ children }) => {
           </aside>
         )}
         <article
-          className={`w-full  h-auto  mt-[10vh] p-6 flex flex-col items-center justify-center`}
+          className={`w-full  h-auto min-h-[90vh] mt-[10vh] p-6 flex flex-col items-center justify-center`}
         >
           {children}
         </article>

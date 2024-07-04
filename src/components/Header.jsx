@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import AuthButton from "./AuthButton";
 import { Link } from "react-router-dom";
+
 // import { SessionContext } from "../context/sessionContext";
 
 const Header = ({ height }) => {
@@ -16,7 +17,7 @@ const Header = ({ height }) => {
         </Link>
       </div>
       <div className="flex items-center justify-between py-3">
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center">
           <AuthButton />
         </div>
         <button className="focus:outline-none lg:hidden">
