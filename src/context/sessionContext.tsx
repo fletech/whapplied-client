@@ -24,7 +24,7 @@
 interface SessionProviderProps {
   children: React.ReactNode;
 }
-import React, { createContext, useState } from "react";
+import React, { createContext, useMemo, useState } from "react";
 import { ISessionContext, ISessionState } from "../types/interfaces";
 const SessionContext = createContext<ISessionContext>(null as any);
 
@@ -40,10 +40,13 @@ const SessionProvider: React.FC<SessionProviderProps> = ({ children }) => {
     }));
   };
 
+  const value = useMemo(
+    () => ({ sessionState, updateSessionState }),
+    [sessionState]
+  );
+
   return (
-    <SessionContext.Provider value={{ sessionState, updateSessionState }}>
-      {children}
-    </SessionContext.Provider>
+    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
   );
 };
 

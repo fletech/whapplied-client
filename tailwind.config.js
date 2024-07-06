@@ -7,7 +7,7 @@ export default {
       // "light-gray": "#d3d3d3",
       silver: "#c0c0c0",
       "light-gray": "#f8f8f8",
-      "dark-gray": "#a9a9a9",
+      "dark-gray": "#f1f1f1",
       "soft-black": "#333333",
       gray: "#808080",
       "dim-gray": "#696969",

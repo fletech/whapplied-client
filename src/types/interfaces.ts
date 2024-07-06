@@ -21,3 +21,9 @@ export interface ISessionContext {
   sessionState: ISessionState;
   updateSessionState(newState: Partial<ISessionState>): void | null;
 }
+
+export interface IStatusOption {
+  readonly value: string;
+  readonly label: string;
+  readonly color: string;
+}

@@ -9,7 +9,7 @@ const Header = ({ height }) => {
 
   return (
     <header
-      className={`Header w-full flex justify-between items-center ${height} fixed top-0 left-0 w-screen px-8 border-b border-b-light-gray bg-white z-10`}
+      className={`Header w-full flex justify-between items-center ${height} fixed top-0 left-0 w-screen px-8 border-b border-b-dark-gray bg-white z-10`}
     >
       <div className="w-auto h-auto">
         <Link to="/" className="flex items-center">

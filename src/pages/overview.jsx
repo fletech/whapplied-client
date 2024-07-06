@@ -3,15 +3,17 @@ import Dashboard from "../components/Dashboard";
 import { SessionContext } from "../context/sessionContext";
 import Heading from "../components/Heading";
 import DefaultHeading from "../components/DefaultHeading";
+// const Dashboard = React.lazy(() => import('../components/Dashboard'));
 
-const DashboardPage = () => {
+const OverviewPage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
+
   if (!user) {
-    return <DefaultHeading user={user} />;
+    return <DefaultHeading />;
   }
   return (
-    <article className="DashboardPage">
+    <article className="OverviewPage">
       <section className="flex">
         <Dashboard />
       </section>
@@ -19,4 +21,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default OverviewPage;
