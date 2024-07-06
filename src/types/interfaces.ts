@@ -14,11 +14,16 @@ export interface IAuthService {
 }
 
 export interface ISessionState {
-  isLoggedIn: boolean;
   user: IUser | null;
 }
 
-export interface ISessionManager {
-  getState(): ISessionState;
-  setState(newState: Partial<ISessionState>): void;
+export interface ISessionContext {
+  sessionState: ISessionState;
+  updateSessionState(newState: Partial<ISessionState>): void | null;
+}
+
+export interface IStatusOption {
+  readonly value: string;
+  readonly label: string;
+  readonly color: string;
 }

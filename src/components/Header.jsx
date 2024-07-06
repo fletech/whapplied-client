@@ -1,22 +1,25 @@
 import React, { useContext } from "react";
-import { useAuth } from "../hooks/useAuth";
 import AuthButton from "./AuthButton";
-import { SessionContext } from "../context/sessionContext";
+import { Link } from "react-router-dom";
 
-const Header = () => {
-  const { sessionState } = useContext(SessionContext);
-  const isLoggedIn = sessionState.user !== null;
+// import { SessionContext } from "../context/sessionContext";
+
+const Header = ({ height }) => {
+  // const { sessionState } = useContext(SessionContext);
 
   return (
-    <header className="Header w-full flex justify-between items-center">
+    <header
+      className={`Header w-full flex justify-between items-center ${height} fixed top-0 left-0 w-screen px-8 border-b border-b-dark-gray bg-white z-10`}
+    >
       <div className="w-auto h-auto">
-        <img src="/logo.svg" alt="logo" className="w-[40px] h-full" />
+        <Link to="/" className="flex items-center">
+          <img src="/logo-3.svg" alt="logo" className="w-[200px] h-full" />
+        </Link>
       </div>
       <div className="flex items-center justify-between py-3">
-        <AuthButton
-          isLoggedIn={isLoggedIn}
-          label={isLoggedIn ? "Logout" : "Login"}
-        />
+        <div className="hidden lg:flex items-center">
+          <AuthButton />
+        </div>
         <button className="focus:outline-none lg:hidden">
           <svg
             className="w-6 h-6"

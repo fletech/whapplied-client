@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
 import Layout from "./components/Layout.jsx";
-import { SessionProvider } from "./context/sessionContext.jsx";
+import { SessionProvider } from "./context/sessionContext";
 import Home from "./components/Home.jsx";
+import OverviewPage from "./pages/overview.jsx";
+import HomePage from "./pages/home.jsx";
 
 function App() {
   return (
@@ -11,8 +12,8 @@ function App() {
       <Router>
         <Layout>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/overview" element={<OverviewPage />} />
           </Routes>
         </Layout>
       </Router>
