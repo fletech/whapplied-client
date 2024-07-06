@@ -31,7 +31,7 @@ const Modal = ({ onClose, trigger, children }) => {
         >
           <RiCloseFill size={24} />
         </button>
-        <div className="w-full h-full flex ">{children}</div>
+        <div className="w-full h-full flex overflow-y-scroll">{children}</div>
       </div>
     </div>
   );
