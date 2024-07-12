@@ -1,8 +1,6 @@
-import React, { useCallback, useContext } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { SessionContext } from "../context/sessionContext";
-import axios from "axios";
-import { TableContext } from "../context/tableContext";
+import React from "react";
+import { useForm, Controller, get } from "react-hook-form";
+
 import CustomSelect from "./CustomSelect";
 import { statuses } from "../lib/statuses";
 import useData from "../hooks/useData";
@@ -12,7 +10,7 @@ const inputStyle =
 const inputs = [
   {
     inputLabel: "Company name",
-    label: "company_name",
+    label: "company",
     required: true,
     type: "",
     readOnly: false,
@@ -83,9 +81,7 @@ const InputField = ({ label, name, type, register, required, errors }) => {
 };
 
 const RowForm = ({ formType }) => {
-  const { sessionState } = useContext(SessionContext);
-  const { user } = sessionState;
-  const { setModified } = useData();
+  const { newItem } = useData();
 
   const {
     register,
@@ -96,39 +92,22 @@ const RowForm = ({ formType }) => {
     control,
   } = useForm();
 
-  const onSubmit = useCallback(
-    async (data) => {
-      console.log(data.date_applied);
-
-      try {
-        const response = await axios.post("/api/v1/data/new-record", {
-          accessToken: user.accessToken,
-          spreadSheetId: user.spreadSheetId,
-          data: data,
-        });
-
-        if (response.status !== 200) {
-          throw new Error("Error saving selected option");
-        }
-        setModified(true);
-
-        reset({
-          company_name: "",
-          position: "",
-          description: "",
-          location: "",
-          url: "",
-          date_applied: "",
-          status: "",
-          id: "",
-        });
-      } catch (err) {
-        console.error("Error saving selected option:", err);
-        throw err;
-      }
-    },
-    [user]
-  );
+  const resetForm = () => {
+    reset({
+      company: "",
+      position: "",
+      description: "",
+      location: "",
+      url: "",
+      date_applied: "",
+      status: "",
+      id: "",
+    });
+  };
+  const onSubmit = async (data) => {
+    await newItem(data);
+    resetForm();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full h-auto p-2 ">

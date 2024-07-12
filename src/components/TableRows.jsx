@@ -17,10 +17,6 @@ const TableRows = ({ openModal }) => {
           rowClicked === rowDetails.hiddenContent.id ? "bg-dark-sea-logo" : ""
         }`}
         onClick={(e) => {
-          // e.stopPropagation();
-          // setRowClicked(rowDetails.hiddenContent.id);
-          // setRowData(rowDetails);
-          // setModalState({ type: "details", trigger: true });
           openModalDetails(e, rowDetails);
         }}
         key={rowIndex}

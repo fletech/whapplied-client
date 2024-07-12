@@ -7,11 +7,8 @@ import useData from "../hooks/useData";
 const HomePage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  const { setModified } = useData();
+  const { getSpreadsheetData } = useData();
 
-  useEffect(() => {
-    setModified(true);
-  }, []);
   return (
     <section className="HomePage flex flex-col items-center justify-center h-full">
       <Heading user={user} />

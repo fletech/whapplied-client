@@ -13,7 +13,6 @@ const Layout = ({ children }) => {
   const isLogged = user !== null;
   const [trigger, setTrigger] = useState(false);
 
-  // console.log(trigger);
   const headerHeight = "10vh";
   return (
     <div className="layout flex flex-col min-h-[100vh] w-full px-8">

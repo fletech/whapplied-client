@@ -11,7 +11,7 @@ import useData from "../hooks/useData";
 const OverviewPage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  const { setModified } = useData();
+  const { getSpreadsheetData } = useData();
 
   // const [triggerNewRow, setTriggerNewRow] = useState(false);
   if (!user) {

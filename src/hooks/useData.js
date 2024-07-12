@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { SessionContext } from "../context/sessionContext";
 import { TableContext } from "../context/tableContext";
 import useModal from "./useModal";
@@ -12,47 +12,97 @@ const useData = () => {
     updateTableState,
     setError,
     setLoading,
-    // modified,
-    // setModified,
+    optimisticTableUpdated,
   } = useContext(TableContext);
   const { closeModal } = useModal();
-  const [modified, setModified] = useState(false);
+
+  const apiOptions = {
+    accessToken: user?.accessToken,
+    spreadSheetId: user?.spreadSheetId,
+  };
+
+  const getSpreadsheetData = async () => {
+    try {
+      const response = await axios.post(
+        "/api/v1/data/spreadsheet-data",
+        apiOptions
+      );
+
+      updateTableState({
+        response: response.data,
+      });
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching spreadsheet data:", err);
+      setError("Failed to fetch data. Please try again later.");
+    }
+  };
+
+  const newItem = useCallback(
+    async (data) => {
+      data = {
+        id: crypto.randomUUID(),
+        ...data,
+        date_applied: new Date(data.date_applied).getTime(),
+      };
+
+      try {
+        // setLoading(true);
+        optimisticTableUpdated().showNewItem(data);
+        const response = await axios.post("/api/v1/data/new-record", {
+          ...apiOptions,
+          data,
+        });
+
+        if (response.status !== 200) {
+          throw new Error("Error saving selected option");
+        }
+
+        getSpreadsheetData();
+        closeModal();
+      } catch (err) {
+        console.error("Error saving selected option:", err);
+        throw err;
+      }
+    },
+    [user]
+  );
+
+  const deleteRow = async (id) => {
+    optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      const response = await axios.put("/api/v1/data/delete-item", {
+        ...apiOptions,
+        id,
+      });
+      //por que tarda tanto en borrar????
+
+      closeModal();
+      setLoading(true);
+      getSpreadsheetData();
+      response && console.log("Row deleted");
+    } catch (err) {
+      console.error("Error deleting row:", err);
+      throw err;
+    }
+  };
 
   useEffect(() => {
-    console.log("useData useEffect", modified);
     if (!user) {
       console.log("User not found");
       return;
     }
-    console.log(user);
-    if (!modified && tableData.sortedData) return;
 
-    if (modified) {
-      closeModal();
-    }
-
-    const getSpreadsheetData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.post("/api/v1/data/spreadsheet-data", {
-          accessToken: user.accessToken,
-          spreadSheetId: user.spreadSheetId,
-        });
-        setLoading(false);
-        updateTableState({
-          response: response.data,
-        });
-      } catch (err) {
-        console.error("Error fetching spreadsheet data:", err);
-        setError("Failed to fetch data. Please try again later.");
-      }
-    };
-
+    if (tableData.sortedData) return;
+    setLoading(true);
     getSpreadsheetData();
-    console.log("setModified to false");
-  }, [user, modified]);
+  }, [user, tableData.sortedData]);
 
-  return { modified, setModified };
+  return {
+    getSpreadsheetData,
+    newItem,
+    deleteRow,
+  };
 };
 
 export default useData;

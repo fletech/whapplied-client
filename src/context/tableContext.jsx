@@ -1,13 +1,5 @@
-// interface ITableSessionProviderProps {
-//   children: React.ReactNode;
-// }
-
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { formatDate } from "../lib/formatDate";
-import RowForm from "../components/RowForm";
-import TableRowDetails from "../components/TableRowDetails";
-import useData from "../hooks/useData";
-// import { ITableData, ITableContext } from "../types/interfaces";
 
 const TableContext = createContext();
 
@@ -17,7 +9,6 @@ const TableProvider = ({ children }) => {
   const [rowClicked, setRowClicked] = useState("");
   const [rowData, setRowData] = useState({});
   const [modalState, setModalState] = useState({ type: "", trigger: false });
-  // const [modalState setModalState] = useState(false);
 
   const [tableData, setTableData] = useState({
     response: null,
@@ -55,27 +46,23 @@ const TableProvider = ({ children }) => {
     }));
   };
 
-  const updateModalState = (newState) => {
-    setTableData((prevState) => ({
-      ...prevState,
-      ...newState,
-    }));
-  };
+  function optimisticTableUpdated() {
+    return {
+      showNewItem(newState) {
+        const updatedTable = tableData.sortedData;
+        const optimisticNewTable = formattedData([newState]);
+        updatedTable.push(optimisticNewTable[0]);
+        updateTableState({ sortedData: updatedTable });
+      },
+      filterDeletedItem(id) {
+        const optimisiticFilteredTable = tableData.sortedData.filter(
+          (item) => item.id !== id
+        );
 
-  // const openModalDetails = (e, rowDetails) => {
-  //   e.stopPropagation();
-  //   setRowClicked(rowDetails.hiddenContent.id);
-  //   setRowData(rowDetails);
-  //   setModalState({ type: "details", trigger: true });
-  // };
-
-  // const closeModal = () => {
-  //   console.log(modified);
-  //   setModalState({ type: null, trigger: false });
-  //   setRowClicked("");
-  //   setRowData({});
-  //   return;
-  // };
+        updateTableState({ sortedData: optimisiticFilteredTable });
+      },
+    };
+  }
 
   const formattedHeaders = (responseHeaders) =>
     responseHeaders
@@ -94,10 +81,6 @@ const TableProvider = ({ children }) => {
       const hiddenContent = {};
       Object.keys(row).forEach((key) => {
         let content = row[key];
-        // if (key === "date_saved" || key === "date_applied") {
-        //   console.log(row[key]);
-        //   content = formatDate(row[key]);
-        // }
         if (key === "date_saved" || key === "date_applied") {
           content = formatDate(row[key]);
         }
@@ -128,7 +111,7 @@ const TableProvider = ({ children }) => {
     tableData.sortedData?.map((rowDetails, rowIndex) => {
       rowClicked === rowDetails.hiddenContent.id && setRowData(rowDetails);
     });
-  }, [rowClicked]);
+  }, [rowClicked, tableData.sortedData]);
 
   const value = useMemo(
     () => ({
@@ -138,16 +121,13 @@ const TableProvider = ({ children }) => {
       setLoading,
       error,
       setError,
-      // modified,
-      // setModified,
       rowClicked,
       setRowClicked,
       rowData,
       setRowData,
       modalState,
       setModalState,
-      // openModalDetails,
-      // closeModal,
+      optimisticTableUpdated,
     }),
     [
       tableData,
@@ -156,16 +136,13 @@ const TableProvider = ({ children }) => {
       updateTableState,
       setLoading,
       setError,
-      // modified,
-      // setModified,
       rowClicked,
       setRowClicked,
       rowData,
       setRowData,
       modalState,
       setModalState,
-      // openModalDetails,
-      // closeModal,
+      optimisticTableUpdated,
     ]
   );
 

@@ -10,8 +10,6 @@ import { SessionContext } from "../context/sessionContext";
 const DashboardTable = () => {
   const { error, loading, rowClicked } = useContext(TableContext);
 
-  console.log("DashboardTable rendered");
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-full">{error}</div>
