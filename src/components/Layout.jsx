@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
       <article className="Layout-content flex min-h-[100vh] h-full">
         {isLogged && <Sidebar setTrigger={setTrigger} />}
         <div
-          className={`w-full  h-auto min-h-[90vh] mt-[10vh] p-6 flex flex-col items-center justify-center`}
+          className={`w-full  h-auto min-h-[90vh] mt-[10vh] p-6 flex flex-col items-center justify-center `}
         >
           {children}
         </div>

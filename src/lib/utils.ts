@@ -1,9 +1,9 @@
 import { IUser } from "../types/interfaces";
 
 export function shortCircuit(value: IUser | {}, callback: React.FC<void>) {
-  console.log("value", value);
+  // console.log("value", value);
   if (value) {
-    console.log(!value);
+    // console.log(!value);
     return callback();
   } else {
     return null;
@@ -21,10 +21,10 @@ export function isOlderThan(date: number | string) {
   // Convierte el contenido de la celda a una fecha
   // const dateContent = new Date().setDate(date);
 
-  console.log(dateContent);
+  // console.log(dateContent);
 
-  console.log(today);
-  console.log("tenDaysAgo", tenDaysAgo);
+  // console.log(today);
+  // console.log("tenDaysAgo", tenDaysAgo);
 
   // Compara las fechas
   return tenDaysAgo > dateContent;

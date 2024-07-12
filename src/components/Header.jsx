@@ -13,7 +13,7 @@ const Header = ({ height }) => {
     >
       <div className="w-auto h-auto">
         <Link to="/" className="flex items-center">
-          <img src="/logo-3.svg" alt="logo" className="w-[200px] h-full" />
+          <img src="/llogo.svg" alt="logo" className="w-[200px] h-full" />
         </Link>
       </div>
       <div className="flex items-center justify-between py-3">
