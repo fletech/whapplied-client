@@ -29,6 +29,7 @@ export const statuses = [
   { value: "waitingOffer", label: "Waiting for an offer", color: "#8a3ffc" }, // LightSeaGreen
   { value: "offer", label: "Got Offer", color: "#ff832b" }, // MediumSeaGreen
   { value: "accepted", label: "Accepted!", color: "#32CD32" }, // LimeGreen
+  { value: "declined", label: "Declined", color: "#BB1738" }, // Red
   { value: "rejected", label: "Rejected", color: "#DC143C" }, // Crimson
   { value: "ghosted", label: "Ghosted", color: "#708090" }, // SlateGray
   { value: "other", label: "Other", color: "#DAA520" }, // GoldenRod

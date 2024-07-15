@@ -18,7 +18,7 @@ const OverviewPage = () => {
     return <DefaultHeading />;
   }
   return (
-    <article className="OverviewPage w-full h-full">
+    <article className="OverviewPage w-full h-full ">
       <section className="flex flex-col mb-8 items-center justify-start w-full h-full ">
         <Dashboard />
       </section>

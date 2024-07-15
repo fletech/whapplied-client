@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
 
   const headerHeight = "10vh";
   return (
-    <div className="layout flex flex-col min-h-[100vh] w-full px-8">
+    <main className="layout flex flex-col min-h-[100vh] w-full px-8 ">
       <Header height={`h-[10vh]`} />
       <article className="Layout-content flex min-h-[100vh] h-full">
         {isLogged && <Sidebar setTrigger={setTrigger} />}
@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
           )}
         </Modal>
       </article>
-    </div>
+    </main>
   );
 };
 

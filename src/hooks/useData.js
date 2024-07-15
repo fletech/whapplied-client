@@ -47,8 +47,8 @@ const useData = () => {
       };
 
       try {
-        // setLoading(true);
-        optimisticTableUpdated().showNewItem(data);
+        setLoading(true);
+        // optimisticTableUpdated().showNewItem(data);
         const response = await axios.post("/api/v1/data/new-record", {
           ...apiOptions,
           data,
@@ -69,17 +69,18 @@ const useData = () => {
   );
 
   const deleteRow = async (id) => {
-    optimisticTableUpdated().filterDeletedItem(id);
+    // optimisticTableUpdated().filterDeletedItem(id);
     try {
+      setLoading(true);
       const response = await axios.put("/api/v1/data/delete-item", {
         ...apiOptions,
         id,
       });
       //por que tarda tanto en borrar????
 
-      closeModal();
-      setLoading(true);
+      // setLoading(true);
       getSpreadsheetData();
+      closeModal();
       response && console.log("Row deleted");
     } catch (err) {
       console.error("Error deleting row:", err);

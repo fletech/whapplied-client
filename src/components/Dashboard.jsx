@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { SessionContext } from "../context/sessionContext";
 import Modal from "./Modal";
 import { dumbData } from "../lib/dumbData";
-import DashboardTable from "./DashboardTable";
+import Table from "./Table";
 
 import TableRowDetails from "./TableRowDetails";
 import RowForm from "./RowForm";
@@ -23,9 +23,9 @@ const Dashboard = () => {
   }
 
   return (
-    <section className="Dashboard w-full">
-      <div className="max-w-screen  flex flex-col h-full w-full ">
-        <div className="mb-8 w-full flex items-center justify-start">
+    <section className="Dashboard w-full ">
+      <div className="max-w-screen  flex flex-col h-full w-full border-[1px] border-dark-gray py-8 rounded-xl shadow-sm bg-gainsboro">
+        <div className="mb-8 w-full flex items-center justify-start px-8">
           <button
             className="rounded-lg bg-custom-blue px-4 py-2 w-auto h-auto text-white font-semibold flex items-center justify-center"
             onClick={() =>
@@ -41,7 +41,7 @@ const Dashboard = () => {
             Add New
           </button>
         </div>
-        <DashboardTable />
+        <Table />
         <Modal trigger={modalState.trigger} onClose={() => closeModal()}>
           {modalState.type == "details" && <TableRowDetails />}
           {modalState.type == "newRow" && <RowForm type="new" />}

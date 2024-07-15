@@ -30,6 +30,11 @@ const colourStyles: StylesConfig<IStatusOption> = {
     height: "40px",
     marginTop: "4px",
     border: "1px solid #f1f1f1",
+    ":hover": {
+      ...styles[":hover"],
+      border: "1px solid #808080",
+    },
+    color: "#232b2b",
   }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     const color = chroma(data.color);
@@ -43,13 +48,14 @@ const colourStyles: StylesConfig<IStatusOption> = {
         ? color.alpha(0.3).css()
         : undefined,
       color: isDisabled
-        ? "#ccc"
+        ? "#808080"
         : isSelected
         ? chroma.contrast(color, "white") > 2
           ? "white"
           : "black"
         : data.color,
       cursor: isDisabled ? "not-allowed" : "default",
+      fontWeight: 500,
 
       ":active": {
         ...styles[":active"],
@@ -66,19 +72,20 @@ const colourStyles: StylesConfig<IStatusOption> = {
   singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
 };
 
-function CustomSelect({ options, value, rowDetails, onChange }) {
+function CustomSelect({ options, value, rowDetails, onChange, defaultValue }) {
   const { isLoadingUI, errorUI, handleStatusChange } = useSelected(rowDetails);
 
   return (
     <div className="relative w-auto h-auto rounded-lg">
       <Select
         options={options}
-        value={value}
+        value={value || defaultValue}
         onChange={
           onChange ? onChange : (selected) => handleStatusChange(selected)
         }
         styles={colourStyles}
-        placeholder="Applied?"
+        placeholder="Have you applied?"
+        className="font-regular text-gray"
       />
       {isLoadingUI && (
         <div className="absolute px-3 top-0 left-0 w-full h-full bg-white-smoke border-[1px] border-custom-blue rounded-lg opacity-90 z-60 text-custom-blue font-semibold flex items-center justify-start transition">

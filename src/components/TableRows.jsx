@@ -13,7 +13,7 @@ const TableRows = ({ openModal }) => {
   return tableData.sortedData?.map((rowDetails, rowIndex) => {
     return (
       <tr
-        className={`m-  relative h-full hover:bg-light-gray cursor-pointer ${
+        className={`relative h-full hover:bg-light-gray cursor-pointer ${
           rowClicked === rowDetails.hiddenContent.id ? "bg-dark-sea-logo" : ""
         }`}
         onClick={(e) => {
@@ -26,7 +26,7 @@ const TableRows = ({ openModal }) => {
             if (cellHeader === "company") {
               return (
                 <td
-                  className="group border-b border-dark-gray bg-light-sea-logo "
+                  className="group border-b border-dark-gray bg-"
                   key={cellHeader}
                 >
                   <a
@@ -35,7 +35,7 @@ const TableRows = ({ openModal }) => {
                     }}
                     href={rowDetails.hiddenContent.url}
                     target="_blank"
-                    className="group-hover:text-custom-blue flex items-center py-4 px-4 w-full h-full"
+                    className="group-hover:text-custom-blue flex items-center py-4 px-4 w-full h-full font-semibold"
                   >
                     {content}
                     <span className="group-hover:opacity-100 opacity-0 ml-2 -rotate-45">
