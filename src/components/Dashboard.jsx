@@ -2,18 +2,19 @@ import { useEffect, useState, useContext } from "react";
 
 import { SessionContext } from "../context/sessionContext";
 import Modal from "./Modal";
-import { dumbData } from "../lib/dumbData";
 import Table from "./Table";
 
 import TableRowDetails from "./TableRowDetails";
 import RowForm from "./RowForm";
 import { TableContext } from "../context/tableContext";
 import useModal from "../hooks/useModal";
+import { MdDeleteForever } from "react-icons/md";
 
 const Dashboard = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  const { modalState, setModalState } = useContext(TableContext);
+  const { modalState, setModalState, manyRowsClicked } =
+    useContext(TableContext);
   const { closeModal } = useModal();
 
   if (!user) {
@@ -41,6 +42,7 @@ const Dashboard = () => {
             Add New
           </button>
         </div>
+
         <Table />
         <Modal trigger={modalState.trigger} onClose={() => closeModal()}>
           {modalState.type == "details" && <TableRowDetails />}

@@ -6,17 +6,40 @@ import { TableContext } from "../context/tableContext";
 import { statuses } from "../lib/statuses";
 import useModal from "../hooks/useModal";
 
+const TableCell = ({ cellHeader, children }) => {
+  return (
+    <td
+      className={` border-b border-dark-gray  py-2 px-4 h-full ${
+        cellHeader == "rating" || cellHeader == "date_applied"
+          ? "text-center"
+          : "text-left"
+      } ${
+        cellHeader === "date_applied"
+          ? "format-to-highlight-more-than-10-days"
+          : ""
+      }`}
+      key={cellHeader}
+    >
+      {children}
+    </td>
+  );
+};
+
 const TableRows = ({ openModal }) => {
-  const { tableData, rowClicked } = useContext(TableContext);
+  const { tableData, rowClicked, setManyRowsClicked } =
+    useContext(TableContext);
   const { openModalDetails } = useModal();
 
   return tableData.sortedData?.map((rowDetails, rowIndex) => {
     return (
       <tr
         className={`relative h-full hover:bg-light-gray cursor-pointer ${
-          rowClicked === rowDetails.hiddenContent.id ? "bg-dark-sea-logo" : ""
+          rowClicked[0] === rowDetails.hiddenContent.id && rowClicked.length > 1
+            ? "bg-dark-sea-logo"
+            : ""
         }`}
         onClick={(e) => {
+          e.stopPropagation();
           openModalDetails(e, rowDetails);
         }}
         key={rowIndex}
@@ -25,40 +48,48 @@ const TableRows = ({ openModal }) => {
           ([cellHeader, content]) => {
             if (cellHeader === "company") {
               return (
-                <td
-                  className="group border-b border-dark-gray bg-"
-                  key={cellHeader}
-                >
-                  <a
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    href={rowDetails.hiddenContent.url}
-                    target="_blank"
-                    className="group-hover:text-custom-blue flex items-center py-4 px-4 w-full h-full font-semibold"
-                  >
-                    {content}
-                    <span className="group-hover:opacity-100 opacity-0 ml-2 -rotate-45">
-                      {"->"}
-                    </span>
-                  </a>
-                </td>
+                <TableCell cellHeader={cellHeader} key={cellHeader}>
+                  <div className="  relative flex w-full h-full items-center pl-6">
+                    <a
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      href={rowDetails.hiddenContent.url}
+                      target="_blank"
+                      className="group  group-hover:text-custom-blue flex items-center h-full w-full font-semibold"
+                    >
+                      <div className=" group-hover:text-custom-blue font-semibold w-full h-full">
+                        {content}
+                      </div>
+                      <span className=" absolute -right-4 group-hover:opacity-100 opacity-0  -rotate-45">
+                        {"->"}
+                      </span>
+                    </a>
+                    <input
+                      type="checkbox"
+                      value={rowDetails.hiddenContent.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // setRowClicked((prev) => [...prev, e.target.value]);
+                      }}
+                      onChange={(e) => {
+                        console.log(e.target.checked);
+                        setManyRowsClicked((prev) => {
+                          if (e.target.checked) {
+                            return [...prev, e.target.value];
+                          }
+                          return prev.filter((id) => id !== e.target.value);
+                        });
+                      }}
+                      className="absolute top-[50%] left-0 transform -translate-y-1/2 mr-4 p-8 w-4 h-4"
+                    />
+                  </div>
+                </TableCell>
               );
             }
 
             return (
-              <td
-                className={`border-b border-dark-gray py-2 px-4 h-full ${
-                  cellHeader == "rating" || cellHeader == "date_applied"
-                    ? "text-center"
-                    : "text-left"
-                } ${
-                  cellHeader === "date_applied"
-                    ? "format-to-highlight-more-than-10-days"
-                    : ""
-                }`}
-                key={cellHeader}
-              >
+              <TableCell cellHeader={cellHeader} key={cellHeader}>
                 {cellHeader === "status" ? (
                   <div onClick={(e) => e.stopPropagation()}>
                     <CustomSelect
@@ -72,7 +103,7 @@ const TableRows = ({ openModal }) => {
                 ) : (
                   content
                 )}
-              </td>
+              </TableCell>
             );
           }
         )}

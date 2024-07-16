@@ -7,6 +7,7 @@ const TableProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [rowClicked, setRowClicked] = useState("");
+  const [manyRowsClicked, setManyRowsClicked] = useState([]);
   const [rowData, setRowData] = useState({});
   const [modalState, setModalState] = useState({ type: "", trigger: false });
 
@@ -21,6 +22,7 @@ const TableProvider = ({ children }) => {
     "id",
     "date_saved",
     "description",
+    "rating",
   ]);
   const [order, setOrder] = useState([
     "date_applied",
@@ -113,6 +115,8 @@ const TableProvider = ({ children }) => {
     });
   }, [rowClicked, tableData.sortedData]);
 
+  console.log(manyRowsClicked);
+
   const value = useMemo(
     () => ({
       tableData,
@@ -123,6 +127,8 @@ const TableProvider = ({ children }) => {
       setError,
       rowClicked,
       setRowClicked,
+      manyRowsClicked,
+      setManyRowsClicked,
       rowData,
       setRowData,
       modalState,
@@ -138,6 +144,8 @@ const TableProvider = ({ children }) => {
       setError,
       rowClicked,
       setRowClicked,
+      manyRowsClicked,
+      setManyRowsClicked,
       rowData,
       setRowData,
       modalState,
