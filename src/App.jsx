@@ -6,6 +6,8 @@ import Home from "./components/Home.jsx";
 import OverviewPage from "./pages/overview.jsx";
 import HomePage from "./pages/home.jsx";
 import { TableProvider } from "./context/tableContext.jsx";
+import ArchivedPage from "./pages/archived.jsx";
+import ActivePage from "./pages/active.jsx";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/overview" element={<OverviewPage />} />
+              <Route path="/archived" element={<ArchivedPage />} />
+              <Route path="/active" element={<ActivePage />} />
             </Routes>
           </Layout>
         </Router>

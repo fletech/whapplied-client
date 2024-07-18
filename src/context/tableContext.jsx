@@ -7,6 +7,7 @@ const TableProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [rowClicked, setRowClicked] = useState("");
+  const [pageFilter, setPageFilter] = useState(null);
   const [manyRowsClicked, setManyRowsClicked] = useState([]);
   const [rowData, setRowData] = useState({});
   const [modalState, setModalState] = useState({ type: "", trigger: false });
@@ -15,6 +16,7 @@ const TableProvider = ({ children }) => {
     response: null,
     sortedData: null,
     filteredHeaders: null,
+    filteredData: null,
   });
 
   const [hiddenItems, setHiddenItems] = useState([
@@ -115,7 +117,21 @@ const TableProvider = ({ children }) => {
     });
   }, [rowClicked, tableData.sortedData]);
 
-  console.log(manyRowsClicked);
+  useEffect(() => {
+    console.log(tableData);
+    console.log(pageFilter);
+
+    const filteredData = tableData.sortedData?.filter((item) => {
+      if (pageFilter == "rejected") {
+        return item.shownContent.status == "rejected";
+      }
+      if (pageFilter == "active") {
+        return item.shownContent.status != "rejected";
+      }
+    });
+
+    updateTableState({ filteredData: filteredData });
+  }, [pageFilter]);
 
   const value = useMemo(
     () => ({
@@ -134,6 +150,8 @@ const TableProvider = ({ children }) => {
       modalState,
       setModalState,
       optimisticTableUpdated,
+      pageFilter,
+      setPageFilter,
     }),
     [
       tableData,
@@ -151,6 +169,8 @@ const TableProvider = ({ children }) => {
       modalState,
       setModalState,
       optimisticTableUpdated,
+      pageFilter,
+      setPageFilter,
     ]
   );
 

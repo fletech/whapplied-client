@@ -43,7 +43,6 @@ const useData = () => {
       data = {
         id: crypto.randomUUID(),
         ...data,
-        date_applied: new Date(data.date_applied).getTime(),
       };
 
       try {
@@ -88,6 +87,25 @@ const useData = () => {
     }
   };
 
+  const updateRow = async (data) => {
+    // optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      setLoading(true);
+      const response = await axios.put("/api/v1/data/update-row", {
+        ...apiOptions,
+        data,
+      });
+      console.log(response);
+      // setLoading(true);
+      getSpreadsheetData();
+      closeModal();
+      response && console.log("Row updated");
+    } catch (err) {
+      console.error("Error deleting row:", err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       console.log("User not found");
@@ -97,11 +115,12 @@ const useData = () => {
     if (tableData.sortedData) return;
     setLoading(true);
     getSpreadsheetData();
-  }, [user, tableData.sortedData]);
+  }, [user, tableData.sortedData, tableData.filteredData]);
 
   return {
     getSpreadsheetData,
     newItem,
+    updateRow,
     deleteRow,
   };
 };

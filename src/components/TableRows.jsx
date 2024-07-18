@@ -5,6 +5,7 @@ import useData from "../hooks/useData";
 import { TableContext } from "../context/tableContext";
 import { statuses } from "../lib/statuses";
 import useModal from "../hooks/useModal";
+import { Controller, useForm } from "react-hook-form";
 
 const TableCell = ({ cellHeader, children }) => {
   return (
@@ -25,12 +26,21 @@ const TableCell = ({ cellHeader, children }) => {
   );
 };
 
-const TableRows = ({ openModal }) => {
+const TableRows = () => {
+  const {
+    control,
+    formState: { isSubmitting },
+  } = useForm({});
   const { tableData, rowClicked, setManyRowsClicked } =
     useContext(TableContext);
   const { openModalDetails } = useModal();
 
-  return tableData.sortedData?.map((rowDetails, rowIndex) => {
+  const dataShown =
+    tableData?.filteredData?.length > 0
+      ? tableData.filteredData
+      : tableData.sortedData;
+
+  return dataShown?.map((rowDetails, rowIndex) => {
     return (
       <tr
         className={`relative h-full hover:bg-light-gray cursor-pointer ${
@@ -92,13 +102,29 @@ const TableRows = ({ openModal }) => {
               <TableCell cellHeader={cellHeader} key={cellHeader}>
                 {cellHeader === "status" ? (
                   <div onClick={(e) => e.stopPropagation()}>
-                    <CustomSelect
+                    <Controller
+                      name="status"
+                      control={control}
+                      render={() => (
+                        <>
+                          <CustomSelect
+                            options={statuses}
+                            value={statuses.find(
+                              (status) => status.value === content
+                            )}
+                            rowDetails={rowDetails}
+                          />
+                        </>
+                      )}
+                    />
+
+                    {/* <CustomSelect
                       options={statuses}
                       value={statuses.find(
                         (status) => status.value === content
                       )}
                       rowDetails={rowDetails}
-                    />
+                    /> */}
                   </div>
                 ) : (
                   content
