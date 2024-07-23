@@ -27,8 +27,8 @@ const TableCell = ({ cellHeader, children }) => {
 };
 
 const TableRows = () => {
-  const [tableDataShown, setTableDataShown] = useState(null);
-  const { tableData, rowClicked, setManyRowsClicked } =
+  // const [tableDataShown, setTableDataShown] = useState(null);
+  const { tableData, rowClicked, setManyRowsClicked, pageFilter } =
     useContext(TableContext);
   const { openModalDetails } = useModal();
   const {
@@ -36,14 +36,17 @@ const TableRows = () => {
     formState: { isSubmitting },
   } = useForm({});
 
-  useEffect(() => {
-    console.log("tableData has changed");
-    tableData?.filteredData?.length > 0
-      ? setTableDataShown(tableData.filteredData)
-      : setTableDataShown(tableData.sortedData);
-  }, [tableData.filteredData, tableData.sortedData]);
+  // useEffect(() => {
+  //   console.log("tableData has changed");
+  //   tableData?.filteredData?.length > 0
+  //     ? setTableDataShown(tableData.filteredData)
+  //     : setTableDataShown(tableData.sortedData);
+  // }, [tableData.filteredData, tableData.sortedData]);
 
-  return tableDataShown?.map((rowDetails, rowIndex) => {
+  const dataToShow =
+    pageFilter === "overview" ? tableData.sortedData : tableData.filteredData;
+
+  return dataToShow?.map((rowDetails, rowIndex) => {
     console.log(rowDetails);
     return (
       <tr

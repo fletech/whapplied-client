@@ -68,6 +68,44 @@ const TableProvider = ({ children }) => {
     };
   }
 
+  const updateRowStatus = (rowId, newStatus) => {
+    setTableData((prevState) => {
+      const updatedSortedData = prevState.sortedData.map((row) =>
+        row.hiddenContent.id === rowId
+          ? { ...row, shownContent: { ...row.shownContent, status: newStatus } }
+          : row
+      );
+
+      const updatedFilteredData = filterDataByPage(
+        updatedSortedData,
+        pageFilter
+      );
+
+      return {
+        ...prevState,
+        sortedData: updatedSortedData,
+        filteredData: updatedFilteredData,
+      };
+    });
+  };
+
+  const filterDataByPage = (data, filter) => {
+    if (filter === "rejected") {
+      return data.filter((item) => item.shownContent.status === "rejected");
+    }
+    if (filter === "active") {
+      return data.filter((item) => item.shownContent.status !== "rejected");
+    }
+    return data; // for "overview" or any other case
+  };
+
+  useEffect(() => {
+    if (tableData.sortedData) {
+      const filteredData = filterDataByPage(tableData.sortedData, pageFilter);
+      setTableData((prevState) => ({ ...prevState, filteredData }));
+    }
+  }, [pageFilter, tableData.sortedData]);
+
   const formattedHeaders = (responseHeaders) =>
     responseHeaders
       ?.filter((header) => {
@@ -117,18 +155,18 @@ const TableProvider = ({ children }) => {
     });
   }, [rowClicked, tableData.sortedData]);
 
-  useEffect(() => {
-    const filteredData = tableData.sortedData?.filter((item) => {
-      if (pageFilter == "rejected") {
-        return item.shownContent.status == "rejected";
-      }
-      if (pageFilter == "active") {
-        return item.shownContent.status != "rejected";
-      }
-    });
+  // useEffect(() => {
+  //   const filteredData = tableData.sortedData?.filter((item) => {
+  //     if (pageFilter == "rejected") {
+  //       return item.shownContent.status == "rejected";
+  //     }
+  //     if (pageFilter == "active") {
+  //       return item.shownContent.status != "rejected";
+  //     }
+  //   });
 
-    updateTableState({ filteredData: filteredData });
-  }, [pageFilter]);
+  //   updateTableState({ filteredData: filteredData });
+  // }, [pageFilter]);
 
   const value = useMemo(
     () => ({
@@ -149,6 +187,7 @@ const TableProvider = ({ children }) => {
       optimisticTableUpdated,
       pageFilter,
       setPageFilter,
+      updateRowStatus,
     }),
     [
       tableData,
@@ -168,6 +207,7 @@ const TableProvider = ({ children }) => {
       optimisticTableUpdated,
       pageFilter,
       setPageFilter,
+      updateRowStatus,
     ]
   );
 
