@@ -27,20 +27,24 @@ const TableCell = ({ cellHeader, children }) => {
 };
 
 const TableRows = () => {
+  const [tableDataShown, setTableDataShown] = useState(null);
+  const { tableData, rowClicked, setManyRowsClicked } =
+    useContext(TableContext);
+  const { openModalDetails } = useModal();
   const {
     control,
     formState: { isSubmitting },
   } = useForm({});
-  const { tableData, rowClicked, setManyRowsClicked } =
-    useContext(TableContext);
-  const { openModalDetails } = useModal();
 
-  const dataShown =
+  useEffect(() => {
+    console.log("tableData has changed");
     tableData?.filteredData?.length > 0
-      ? tableData.filteredData
-      : tableData.sortedData;
+      ? setTableDataShown(tableData.filteredData)
+      : setTableDataShown(tableData.sortedData);
+  }, [tableData.filteredData, tableData.sortedData]);
 
-  return dataShown?.map((rowDetails, rowIndex) => {
+  return tableDataShown?.map((rowDetails, rowIndex) => {
+    console.log(rowDetails);
     return (
       <tr
         className={`relative h-full hover:bg-light-gray cursor-pointer ${

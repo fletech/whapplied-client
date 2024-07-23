@@ -118,9 +118,6 @@ const TableProvider = ({ children }) => {
   }, [rowClicked, tableData.sortedData]);
 
   useEffect(() => {
-    console.log(tableData);
-    console.log(pageFilter);
-
     const filteredData = tableData.sortedData?.filter((item) => {
       if (pageFilter == "rejected") {
         return item.shownContent.status == "rejected";

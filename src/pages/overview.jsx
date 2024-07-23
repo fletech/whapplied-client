@@ -15,14 +15,14 @@ const OverviewPage = () => {
   const { setPageFilter } = useContext(TableContext);
   const { getSpreadsheetData } = useData();
 
+  useEffect(() => {
+    setPageFilter("overview");
+  }, []);
   // const [triggerNewRow, setTriggerNewRow] = useState(false);
   if (!user) {
     return <DefaultHeading />;
   }
 
-  useEffect(() => {
-    setPageFilter(null);
-  }, []);
   return (
     <article className="OverviewPage w-full h-full ">
       <section className="flex flex-col mb-8 items-center justify-start w-full h-full ">

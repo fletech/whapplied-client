@@ -6,7 +6,7 @@ import { TableContext } from "../context/tableContext";
 const useSelected = (rowDetails) => {
   const rowId = rowDetails?.hiddenContent.id;
   const { sessionState } = useContext(SessionContext);
-  const { tableData, updateTableState } = useContext(TableContext);
+  const { tableData, updateTableState, filterPage } = useContext(TableContext);
   const { user } = sessionState;
   const [isLoadingUI, setIsLoadingUI] = useState(false);
   const [errorUI, setErrorUI] = useState(false);
@@ -33,12 +33,13 @@ const useSelected = (rowDetails) => {
     [user]
   );
 
+  const dataKey = filterPage == "overview" ? "sortedData" : "filteredData";
   const updateUI = useCallback(
     (selectedOption, rowId) => {
       rowDetails &&
         updateTableState({
           ...tableData,
-          sortedData: tableData.sortedData.map((row) =>
+          [dataKey]: tableData[dataKey].map((row) =>
             row.hiddenContent?.id === rowId
               ? {
                   ...row,
@@ -60,6 +61,7 @@ const useSelected = (rowDetails) => {
     }
     try {
       updateUI(selected, rowId);
+
       await sendSelectedToAPI(selected, rowId);
       setIsLoadingUI(false);
     } catch (error) {
