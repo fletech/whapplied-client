@@ -1,24 +1,21 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+
 import { SessionContext } from "../context/sessionContext";
 import Modal from "./Modal";
-import { dumbData } from "../lib/dumbData";
-import DashboardTable from "./DashboardTable";
-import useData from "../hooks/useData";
+import Table from "./Table";
+
+import TableRowDetails from "./TableRowDetails";
+import RowForm from "./RowForm";
+import { TableContext } from "../context/tableContext";
+import useModal from "../hooks/useModal";
+import { MdDeleteForever } from "react-icons/md";
 
 const Dashboard = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  const [rowClicked, setRowClicked] = useState("");
-  const [rowData, setRowData] = useState("");
-
-  const closeModal = () => {
-    if (rowClicked === rowData.hiddenContent.id) {
-      setRowClicked("");
-      setRowData({});
-      return;
-    }
-  };
+  const { modalState, setModalState, manyRowsClicked } =
+    useContext(TableContext);
+  const { closeModal } = useModal();
 
   if (!user) {
     return (
@@ -27,31 +24,29 @@ const Dashboard = () => {
   }
 
   return (
-    <section className="Dashboard">
-      <div className="max-w-screen  ">
-        <DashboardTable
-          rowClicked={rowClicked}
-          setRowClicked={setRowClicked}
-          setRowData={setRowData}
-        />
-        <Modal data={rowData} trigger={rowClicked !== ""} onClose={closeModal}>
-          {rowClicked !== "" && (
-            <div className="flex flex-col items-center justify-center w-full">
-              <p className="text-xl font-bold mt-4">
-                {rowData.shownContent.company}
-              </p>
-              <p className="text-sm text-gray-500">
-                {rowData.shownContent.position}
-              </p>
-              <p className="text-sm text-gray-500">
-                {rowData.shownContent.location}
-              </p>
+    <section className="Dashboard w-full ">
+      <div className="max-w-screen  flex flex-col h-full w-full border-[1px] border-dark-gray py-8 rounded-xl shadow-sm bg-gainsboro">
+        <div className="mb-8 w-full flex items-center justify-start px-8">
+          <button
+            className="rounded-lg bg-custom-blue px-4 py-2 w-auto h-auto text-white font-semibold flex items-center justify-center"
+            onClick={() =>
+              setModalState({
+                type: "newRow",
+                trigger: true,
+              })
+            }
+          >
+            <span className="mr-2 rounded-full bg-white-smoke text-custom-blue w-4 h-4 flex items-center justify-center pb-[1px] font-extrabold outline-2">
+              +
+            </span>{" "}
+            Add New
+          </button>
+        </div>
 
-              <p className="text-sm text-gray-500">
-                {rowData.shownContent.status}
-              </p>
-            </div>
-          )}
+        <Table />
+        <Modal trigger={modalState.trigger} onClose={() => closeModal()}>
+          {modalState.type == "details" && <TableRowDetails />}
+          {modalState.type == "newRow" && <RowForm type="new" />}
         </Modal>
       </div>
     </section>

@@ -1,3 +1,24 @@
+export interface IRowDetails {
+  shownContent: {
+    date_applied: number;
+    company: string;
+    position: string;
+    location: string;
+    status: string;
+    rating: number;
+  };
+  hiddenContent: {
+    id: string;
+    url: string;
+    date_saved: number;
+    description: string;
+    rawDates: {
+      rawDateApplied: number;
+      rawDateSaved: number;
+    };
+  };
+}
+
 export interface IUser {
   id: string;
   name: string;
@@ -5,6 +26,27 @@ export interface IUser {
   avatarUrl?: string;
   accessToken: string;
   spreadSheetId: string;
+}
+
+export interface ITable {
+  shownContent: {
+    date_applied: number;
+    company: string;
+    position: string;
+    location: string;
+    status: string;
+    rating: number;
+  };
+  hiddenContent: {
+    id: string;
+    url: string;
+    date_saved: number;
+    description: string;
+    rawDates: {
+      rawDateApplied: number;
+      rawDateSaved: number;
+    };
+  };
 }
 
 export interface IAuthService {
@@ -26,4 +68,13 @@ export interface IStatusOption {
   readonly value: string;
   readonly label: string;
   readonly color: string;
+}
+
+export interface ITableData {
+  data: ITable | null;
+}
+
+export interface ITableContext {
+  tableData: ITableData | null;
+  updateTableState(newState: Partial<ITableData>): void | null;
 }

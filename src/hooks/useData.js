@@ -1,94 +1,128 @@
 import axios from "axios";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { SessionContext } from "../context/sessionContext";
+import { TableContext } from "../context/tableContext";
+import useModal from "./useModal";
 
-const useData = (setError, setLoading) => {
+const useData = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  console.log(user);
-  const [hiddenItems, setHiddenItems] = useState([
-    "url",
-    "id",
-    "date_saved",
-    "description",
-  ]);
-  const [order, setOrder] = useState([
-    "date_applied",
-    "company",
-    "position",
-    "location",
-    "status",
-    "rating",
-  ]);
+  const {
+    tableData,
+    updateTableState,
+    setError,
+    setLoading,
+    optimisticTableUpdated,
+  } = useContext(TableContext);
+  const { closeModal } = useModal();
 
-  const [data, setData] = useState([]);
-  const [tableHeaders, setTableHeaders] = useState([]);
+  const apiOptions = {
+    accessToken: user?.accessToken,
+    spreadSheetId: user?.spreadSheetId,
+  };
+
+  const getSpreadsheetData = async () => {
+    try {
+      const response = await axios.post(
+        "/api/v1/data/spreadsheet-data",
+        apiOptions
+      );
+
+      updateTableState({
+        response: response.data,
+      });
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching spreadsheet data:", err);
+      setError("Failed to fetch data. Please try again later.");
+    }
+  };
+
+  const newItem = useCallback(
+    async (data) => {
+      data = {
+        id: crypto.randomUUID(),
+        ...data,
+      };
+
+      try {
+        setLoading(true);
+        // optimisticTableUpdated().showNewItem(data);
+        const response = await axios.post("/api/v1/data/new-record", {
+          ...apiOptions,
+          data,
+        });
+
+        if (response.status !== 200) {
+          throw new Error("Error saving selected option");
+        }
+
+        getSpreadsheetData();
+        closeModal();
+      } catch (err) {
+        console.error("Error saving selected option:", err);
+        throw err;
+      }
+    },
+    [user]
+  );
+
+  const deleteRow = async (id) => {
+    // optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      setLoading(true);
+      const response = await axios.put("/api/v1/data/delete-item", {
+        ...apiOptions,
+        id,
+      });
+      //por que tarda tanto en borrar????
+
+      // setLoading(true);
+      getSpreadsheetData();
+      closeModal();
+      response && console.log("Row deleted");
+    } catch (err) {
+      console.error("Error deleting row:", err);
+      throw err;
+    }
+  };
+
+  const updateRow = async (data) => {
+    // optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      setLoading(true);
+      const response = await axios.put("/api/v1/data/update-row", {
+        ...apiOptions,
+        data,
+      });
+      console.log(response);
+      // setLoading(true);
+      getSpreadsheetData();
+      closeModal();
+      response && console.log("Row updated");
+    } catch (err) {
+      console.error("Error deleting row:", err);
+      throw err;
+    }
+  };
 
   useEffect(() => {
     if (!user) {
+      console.log("User not found");
       return;
     }
 
-    const getSpreadsheetData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.post("/api/v1/auth/spreadsheet-data", {
-          accessToken: user.accessToken,
-          spreadSheetId: user.spreadSheetId,
-        });
-
-        let datita = response.data.data;
-        setTableHeaders(response.data.headers);
-
-        setData(datita);
-      } catch (err) {
-        console.error("Error fetching spreadsheet data:", err);
-        setError("Failed to fetch data. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    if (tableData.sortedData) return;
+    setLoading(true);
     getSpreadsheetData();
-  }, [user]);
+  }, [user, tableData.sortedData, tableData.filteredData]);
 
-  const filteredHeaders = useMemo(
-    () =>
-      tableHeaders
-        .filter((header) => {
-          return !hiddenItems.includes(header);
-        })
-        .map((headerLowCase) => headerLowCase.toUpperCase().replace("_", " ")),
-    [hiddenItems, tableHeaders]
-  );
-
-  const sortedData = useMemo(
-    () =>
-      data.map((row) => {
-        let rawDates = {
-          rawDateApplied: row.date_applied,
-          rawDateSaved: row.date_saved,
-        };
-        const shownContent = {};
-        const hiddenContent = {};
-        Object.keys(row).forEach((key) => {
-          let content = row[key];
-          if (key === "date_saved" || key === "date_applied") {
-            content = new Date(Number(row[key]) * 1000).toLocaleDateString();
-          }
-          if (hiddenItems.includes(key)) {
-            hiddenContent[key] = content;
-          } else {
-            shownContent[key] = content;
-          }
-        });
-        hiddenContent.rawDates = rawDates;
-        return { shownContent, hiddenContent };
-      }),
-    [data, hiddenItems]
-  );
-
-  return { filteredHeaders, sortedData };
+  return {
+    getSpreadsheetData,
+    newItem,
+    updateRow,
+    deleteRow,
+  };
 };
 
 export default useData;
