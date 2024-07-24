@@ -8,6 +8,7 @@ import HomePage from "./pages/home.jsx";
 import { TableProvider } from "./context/tableContext.jsx";
 import ArchivedPage from "./pages/archived.jsx";
 import ActivePage from "./pages/active.jsx";
+import RejectedPage from "./pages/rejected.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/overview" element={<OverviewPage />} />
               <Route path="/archived" element={<ArchivedPage />} />
+              <Route path="/rejected" element={<RejectedPage />} />
               <Route path="/active" element={<ActivePage />} />
             </Routes>
           </Layout>

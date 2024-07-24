@@ -36,18 +36,10 @@ const TableRows = () => {
     formState: { isSubmitting },
   } = useForm({});
 
-  // useEffect(() => {
-  //   console.log("tableData has changed");
-  //   tableData?.filteredData?.length > 0
-  //     ? setTableDataShown(tableData.filteredData)
-  //     : setTableDataShown(tableData.sortedData);
-  // }, [tableData.filteredData, tableData.sortedData]);
-
   const dataToShow =
     pageFilter === "overview" ? tableData.sortedData : tableData.filteredData;
 
   return dataToShow?.map((rowDetails, rowIndex) => {
-    console.log(rowDetails);
     return (
       <tr
         className={`relative h-full hover:bg-light-gray cursor-pointer ${

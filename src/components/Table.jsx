@@ -6,7 +6,8 @@ import TableHeaders from "./TableHeaders";
 import { TableContext } from "../context/tableContext";
 
 const Table = () => {
-  const { error, loading, rowClicked, tableData } = useContext(TableContext);
+  const { error, loading, rowClicked, tableData, pageFilter } =
+    useContext(TableContext);
 
   if (error) {
     return (
@@ -22,16 +23,16 @@ const Table = () => {
   }
 
   return (
-    <section className="w-auto h-auto z-100">
+    <section className="w-auto h-auto z-100 relative ">
       <table
-        className={`pr-8 table-auto text-soft-black w-full border-collapse relative bg-white ${
+        className={`table-auto text-soft-black w-full border-collapse relative bg-white  ${
           rowClicked !== "" ? "pointer-events-none" : ""
         }`}
       >
         <thead className=" sticky top-[10vh]  rounded-xl bg-light-gray z-10 opacity-95 ">
           <tr className="relative">{<TableHeaders />}</tr>
         </thead>
-        <tbody className="w-full relative ">{<TableRows />}</tbody>
+        <tbody className="w-full relative">{<TableRows />}</tbody>
       </table>
     </section>
   );

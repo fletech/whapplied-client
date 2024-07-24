@@ -13,6 +13,8 @@ const useData = () => {
     setError,
     setLoading,
     optimisticTableUpdated,
+    manyRowsClicked,
+    setManyRowsClicked,
   } = useContext(TableContext);
   const { closeModal } = useModal();
 
@@ -95,13 +97,49 @@ const useData = () => {
         ...apiOptions,
         data,
       });
-      console.log(response);
       // setLoading(true);
       getSpreadsheetData();
       closeModal();
       response && console.log("Row updated");
     } catch (err) {
       console.error("Error deleting row:", err);
+      throw err;
+    }
+  };
+
+  const archiveRow = async (id) => {
+    // optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      setLoading(true);
+      const response = await axios.put("/api/v1/data/archive-item", {
+        ...apiOptions,
+        id,
+      });
+      // setLoading(true);
+      getSpreadsheetData();
+      closeModal();
+      response && console.log("Row archived");
+    } catch (err) {
+      console.error("Error archiving a row:", err);
+      throw err;
+    }
+  };
+
+  const archiveMultipleRows = async (id) => {
+    // optimisticTableUpdated().filterDeletedItem(id);
+    try {
+      setLoading(true);
+      setManyRowsClicked([]);
+      const response = await axios.put("/api/v1/data/archive-multiple-items", {
+        ...apiOptions,
+        ids: manyRowsClicked,
+      });
+      // setLoading(true);
+      getSpreadsheetData();
+      closeModal();
+      response && console.log("Row archived");
+    } catch (err) {
+      console.error("Error archiving rows:", err);
       throw err;
     }
   };
@@ -122,6 +160,8 @@ const useData = () => {
     newItem,
     updateRow,
     deleteRow,
+    archiveRow,
+    archiveMultipleRows,
   };
 };
 

@@ -9,14 +9,14 @@ import useData from "../hooks/useData";
 import { TableContext } from "../context/tableContext";
 // const Dashboard = React.lazy(() => import('../components/Dashboard'));
 
-const ActivePage = () => {
+const RejectedPage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
   const { setPageFilter } = useContext(TableContext);
   const { getSpreadsheetData } = useData();
 
   useEffect(() => {
-    setPageFilter("active");
+    setPageFilter("rejected");
   }, []);
 
   // const [triggerNewRow, setTriggerNewRow] = useState(false);
@@ -32,4 +32,4 @@ const ActivePage = () => {
   );
 };
 
-export default ActivePage;
+export default RejectedPage;

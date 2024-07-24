@@ -5,7 +5,7 @@ export interface IRowDetails {
     position: string;
     location: string;
     status: string;
-    rating: number;
+    stage: number;
   };
   hiddenContent: {
     id: string;
@@ -35,7 +35,7 @@ export interface ITable {
     position: string;
     location: string;
     status: string;
-    rating: number;
+    stage: number;
   };
   hiddenContent: {
     id: string;

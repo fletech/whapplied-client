@@ -151,7 +151,7 @@ const RowForm = ({ edit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-auto p-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full">
       <div className="grid grid-cols-2 w-full h-auto gap-4">
         {inputs.map((input) => (
           <div
@@ -172,7 +172,7 @@ const RowForm = ({ edit }) => {
         ))}
       </div>
 
-      <div className="pr-2 mt-2 w-1/2">
+      <div className=" mt-2 w-1/2 fixed bottom-10 right-[50%] transform translate-x-[50%] ">
         <input
           type="submit"
           value={

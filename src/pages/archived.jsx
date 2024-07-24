@@ -16,7 +16,7 @@ const ArchivedPage = () => {
   const { getSpreadsheetData } = useData();
 
   useEffect(() => {
-    setPageFilter("rejected");
+    setPageFilter("archived");
   }, []);
 
   // const [triggerNewRow, setTriggerNewRow] = useState(false);
@@ -26,7 +26,7 @@ const ArchivedPage = () => {
   return (
     <article className="OverviewPage w-full h-full ">
       <section className="flex flex-col mb-8 items-center justify-start w-full h-full ">
-        <Dashboard filter={"rejected"} />
+        <Dashboard filter={"archived"} />
       </section>
     </article>
   );

@@ -13,7 +13,7 @@ import { MdDeleteForever } from "react-icons/md";
 const Dashboard = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  const { modalState, setModalState, manyRowsClicked } =
+  const { modalState, setModalState, pageFilter, tableData, isLoading } =
     useContext(TableContext);
   const { closeModal } = useModal();
 
@@ -44,6 +44,17 @@ const Dashboard = () => {
         </div>
 
         <Table />
+        <small className=" ml-4 mt-8 ">
+          Showing{" "}
+          <span>
+            {isLoading
+              ? null
+              : pageFilter === "overview"
+              ? tableData.sortedData?.length
+              : tableData.filteredData?.length}{" "}
+          </span>
+          results
+        </small>
         <Modal trigger={modalState.trigger} onClose={() => closeModal()}>
           {modalState.type == "details" && <TableRowDetails />}
           {modalState.type == "newRow" && <RowForm type="new" />}

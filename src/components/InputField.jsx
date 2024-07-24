@@ -48,7 +48,7 @@ const InputField = ({ label, name, type, required, options, control }) => {
             ) : type === "textarea" ? (
               <textarea
                 {...field}
-                className={`${inputStyle} max-h-[150px] resize-y`}
+                className={`${inputStyle} max-h-24 resize-y min-h-18 h-auto`}
               />
             ) : (
               <input {...field} type={type} className={inputStyle} />

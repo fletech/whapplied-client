@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { formatDate } from "../lib/formatDate";
+
+import { formattedData, formattedHeaders } from "../lib/formatTableData";
 
 const TableContext = createContext();
 
@@ -24,7 +25,7 @@ const TableProvider = ({ children }) => {
     "id",
     "date_saved",
     "description",
-    "rating",
+    "stage",
   ]);
   const [order, setOrder] = useState([
     "date_applied",
@@ -32,7 +33,7 @@ const TableProvider = ({ children }) => {
     "position",
     "location",
     "status",
-    "rating",
+    "stage",
   ]);
 
   // const renderModalChildren = (type, { props }) => {
@@ -54,7 +55,7 @@ const TableProvider = ({ children }) => {
     return {
       showNewItem(newState) {
         const updatedTable = tableData.sortedData;
-        const optimisticNewTable = formattedData([newState]);
+        const optimisticNewTable = formattedData([newState], hiddenItems);
         updatedTable.push(optimisticNewTable[0]);
         updateTableState({ sortedData: updatedTable });
       },
@@ -94,8 +95,16 @@ const TableProvider = ({ children }) => {
       return data.filter((item) => item.shownContent.status === "rejected");
     }
     if (filter === "active") {
-      return data.filter((item) => item.shownContent.status !== "rejected");
+      return data.filter(
+        (item) =>
+          item.hiddenContent.stage === "1" &&
+          item.shownContent.status !== "rejected"
+      );
     }
+    if (filter === "archived") {
+      return data.filter((item) => item.hiddenContent.stage === "2");
+    }
+
     return data; // for "overview" or any other case
   };
 
@@ -106,43 +115,16 @@ const TableProvider = ({ children }) => {
     }
   }, [pageFilter, tableData.sortedData]);
 
-  const formattedHeaders = (responseHeaders) =>
-    responseHeaders
-      ?.filter((header) => {
-        return !hiddenItems.includes(header);
-      })
-      .map((headerLowCase) => headerLowCase.toUpperCase().replace("_", " "));
-
-  const formattedData = (responseData) =>
-    responseData?.map((row) => {
-      let rawDates = {
-        rawDateApplied: row.date_applied,
-        rawDateSaved: row.date_saved,
-      };
-      const shownContent = {};
-      const hiddenContent = {};
-      Object.keys(row).forEach((key) => {
-        let content = row[key];
-        if (key === "date_saved" || key === "date_applied") {
-          content = formatDate(row[key]);
-        }
-        if (hiddenItems.includes(key)) {
-          hiddenContent[key] = content;
-        } else {
-          shownContent[key] = content;
-        }
-      });
-      hiddenContent.rawDates = rawDates;
-      return { shownContent, hiddenContent };
-    });
-
   useEffect(() => {
     if (!tableData.response) {
       return;
     }
-    const sortedData = formattedData(tableData.response?.data);
+    const sortedData = formattedData(tableData.response?.data, hiddenItems);
 
-    const filteredHeaders = formattedHeaders(tableData.response?.headers);
+    const filteredHeaders = formattedHeaders(
+      tableData.response?.headers,
+      hiddenItems
+    );
 
     updateTableState({ sortedData, filteredHeaders });
   }, [tableData.response]);
@@ -154,19 +136,6 @@ const TableProvider = ({ children }) => {
       rowClicked === rowDetails.hiddenContent.id && setRowData(rowDetails);
     });
   }, [rowClicked, tableData.sortedData]);
-
-  // useEffect(() => {
-  //   const filteredData = tableData.sortedData?.filter((item) => {
-  //     if (pageFilter == "rejected") {
-  //       return item.shownContent.status == "rejected";
-  //     }
-  //     if (pageFilter == "active") {
-  //       return item.shownContent.status != "rejected";
-  //     }
-  //   });
-
-  //   updateTableState({ filteredData: filteredData });
-  // }, [pageFilter]);
 
   const value = useMemo(
     () => ({

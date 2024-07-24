@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { RiStackFill } from "react-icons/ri";
 import { BiSolidArchive } from "react-icons/bi";
 import { MdPlaylistPlay } from "react-icons/md";
-
+import { MdOutlinePlaylistRemove } from "react-icons/md";
 import AuthButton from "./AuthButton";
 import { SessionContext } from "../context/sessionContext";
 import { TableContext } from "../context/tableContext";
@@ -43,9 +43,22 @@ const Sidebar = ({ setTrigger }) => {
           </div>
           <div className="w-full flex flex-col items-start justify-start mb-2">
             <Link
-              to="/archived"
+              to="/rejected"
               className={`hover:text-custom-blue flex items-center  w-full h-full ${
                 pageFilter == "rejected"
+                  ? "text-custom-blue"
+                  : "text-soft-black"
+              }`}
+            >
+              <MdOutlinePlaylistRemove />
+              <p className="ml-2">Rejected</p>
+            </Link>
+          </div>
+          <div className="w-full flex flex-col items-start justify-start mb-2">
+            <Link
+              to="/archived"
+              className={`hover:text-custom-blue flex items-center  w-full h-full ${
+                pageFilter == "archived"
                   ? "text-custom-blue"
                   : "text-soft-black"
               }`}

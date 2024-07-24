@@ -3,9 +3,13 @@ import { TableContext } from "../context/tableContext";
 
 import { MdDeleteForever } from "react-icons/md";
 import { BiSolidArchive } from "react-icons/bi";
+import useData from "../hooks/useData";
 
 const ManySelectedButton = () => {
   const { manyRowsClicked, setManyRowsClicked } = useContext(TableContext);
+  const { archiveMultipleRows } = useData();
+
+  console.log(manyRowsClicked);
 
   if (manyRowsClicked.length > 0)
     return (
@@ -23,7 +27,10 @@ const ManySelectedButton = () => {
           </button>
         </div>
         <div className="ml-2 flex items-center ">
-          <button className="ml-2 bg-sea-green hover:bg-green text-white flex items-center rounded-lg border px-3 py-2">
+          <button
+            className="ml-2 bg-sea-green hover:bg-green text-white flex items-center rounded-lg border px-3 py-2"
+            onClick={() => archiveMultipleRows()}
+          >
             <div className="mb-[0.3px]">
               <BiSolidArchive />
             </div>

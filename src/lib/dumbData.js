@@ -9,7 +9,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386610,
-    rating: 5,
+    stage: 5,
   },
   {
     id: "67h32kfdbi9l8m7",
@@ -21,7 +21,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386615,
-    rating: 3,
+    stage: 3,
   },
   {
     id: "78j43lm2qwen3o8",
@@ -33,7 +33,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386620,
-    rating: 4,
+    stage: 4,
   },
   {
     id: "89k54no5pqwe6q9",
@@ -45,7 +45,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386625,
-    rating: 5,
+    stage: 5,
   },
   {
     id: "90l65op8qweq7r0",
@@ -57,7 +57,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386630,
-    rating: 4,
+    stage: 4,
   },
   {
     id: "12a23bcasdd5e6",
@@ -69,7 +69,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386635,
-    rating: 4,
+    stage: 4,
   },
   {
     id: "23b34cd5asde6f7",
@@ -81,7 +81,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386640,
-    rating: 5,
+    stage: 5,
   },
   {
     id: "34c45de6fasd7g8",
@@ -93,7 +93,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386645,
-    rating: 3,
+    stage: 3,
   },
   {
     id: "45d56ef7asd8h9",
@@ -105,7 +105,7 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386650,
-    rating: 4,
+    stage: 4,
   },
   {
     id: "56e67fgasdh9i0",
@@ -117,6 +117,6 @@ export const dumbData = [
     status: "",
     url: "https://www.innovatetech.com",
     date_applied: 1719386655,
-    rating: 5,
+    stage: 5,
   },
 ];
