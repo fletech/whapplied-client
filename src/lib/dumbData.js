@@ -1,7 +1,7 @@
 export const dumbData = [
   {
     id: "54g21dsdff4g5h6",
-    date_saved: 1719447810,
+    logs: 1719447810,
     company: "InnovateTech",
     position: "Software Engineer",
     description: "Full stack developer",
@@ -13,7 +13,7 @@ export const dumbData = [
   },
   {
     id: "67h32kfdbi9l8m7",
-    date_saved: 1719447815,
+    logs: 1719447815,
     company: "CyberNet",
     position: "Data Analyst",
     description: "Full stack developer",
@@ -25,7 +25,7 @@ export const dumbData = [
   },
   {
     id: "78j43lm2qwen3o8",
-    date_saved: 1719447820,
+    logs: 1719447820,
     company: "QuantumSoft",
     position: "Back-end Dev",
     description: "Full stack developer",
@@ -37,7 +37,7 @@ export const dumbData = [
   },
   {
     id: "89k54no5pqwe6q9",
-    date_saved: 1719447825,
+    logs: 1719447825,
     company: "FinTech Group",
     position: "DevOps Engineer",
     description: "Full stack developer",
@@ -49,7 +49,7 @@ export const dumbData = [
   },
   {
     id: "90l65op8qweq7r0",
-    date_saved: 1719447830,
+    logs: 1719447830,
     company: "NextGen Solutions",
     position: "UI/UX Designer",
     description: "Full stack developer",
@@ -61,7 +61,7 @@ export const dumbData = [
   },
   {
     id: "12a23bcasdd5e6",
-    date_saved: 1719447835,
+    logs: 1719447835,
     company: "AlphaTech",
     position: "Machine Learning Engineer",
     description: "Full stack developer",
@@ -73,7 +73,7 @@ export const dumbData = [
   },
   {
     id: "23b34cd5asde6f7",
-    date_saved: 1719447840,
+    logs: 1719447840,
     company: "GreenEnergy",
     position: "Sustainability Analyst",
     description: "Full stack developer",
@@ -85,7 +85,7 @@ export const dumbData = [
   },
   {
     id: "34c45de6fasd7g8",
-    date_saved: 1719447845,
+    logs: 1719447845,
     company: "HealthTech",
     position: "Full Stack Developer",
     description: "Full stack developer",
@@ -97,7 +97,7 @@ export const dumbData = [
   },
   {
     id: "45d56ef7asd8h9",
-    date_saved: 1719447850,
+    logs: 1719447850,
     company: "EduSoft",
     position: "Data Scientist",
     description: "Full stack developer",
@@ -109,7 +109,7 @@ export const dumbData = [
   },
   {
     id: "56e67fgasdh9i0",
-    date_saved: 1719447855,
+    logs: 1719447855,
     company: "AgroTech",
     position: "Blockchain Developer",
     description: "Full stack developer",

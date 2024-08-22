@@ -2,23 +2,23 @@ import { useContext } from "react";
 import { TableContext } from "../context/tableContext";
 
 const useModal = () => {
-  const { setRowClicked, setRowData, setModalState } = useContext(TableContext);
+  const context = useContext(TableContext);
 
-  const openModalDetails = (e, rowDetails) => {
-    e.stopPropagation();
-    setRowClicked(rowDetails.hiddenContent.id);
-    setRowData(rowDetails);
-    setModalState({ type: "details", trigger: true });
-  };
+  if (!context) {
+    throw new Error(
+      "useModal debe ser usado dentro de un TableContextProvider"
+    );
+  }
+
+  const { setRowClicked, setRowData, setModalState } = context;
 
   const closeModal = () => {
-    setModalState({ type: null, trigger: false });
+    setModalState({ type: null, trigger: false, children: null });
     setRowClicked("");
     setRowData({});
-    return;
   };
 
-  return { openModalDetails, closeModal };
+  return { closeModal };
 };
 
 export default useModal;

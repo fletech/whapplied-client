@@ -21,6 +21,23 @@ export class AuthService implements IAuthService {
     }
   }
 
+  // async checkAuthStatus(): Promise<IUser | null> {
+  //   try {
+  //     const response = await fetch(`/api/v1/auth/me`, {
+  //       method: "GET",
+  //       credentials: "include",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     return response.ok ? ((await response.json()).user as IUser) : null;
+  //   } catch (error) {
+  //     console.error("Error checking auth status:", error);
+  //     return null;
+  //   }
+  // }
   async checkAuthStatus(): Promise<IUser | null> {
     try {
       const response = await fetch(`/api/v1/auth/me`, {
@@ -31,7 +48,35 @@ export class AuthService implements IAuthService {
           "Content-Type": "application/json",
         },
       });
-      return response.ok ? ((await response.json()).user as IUser) : null;
+
+      // if (!response.ok) {
+      //   if (response.status === 401) {
+      //     console.log("Token has expired, attempting to refresh...");
+      //     // Intentamos forzar la revalidación si se recibe un 401
+      //     // El middleware del backend debería revalidar y devolver un nuevo token
+      //     const refreshResponse = await fetch(`/api/v1/auth/me`, {
+      //       method: "GET",
+      //       credentials: "include",
+      //       headers: {
+      //         Accept: "application/json",
+      //         "Content-Type": "application/json",
+      //       },
+      //     });
+
+      //     if (refreshResponse.ok) {
+      //       return (await refreshResponse.json()).user as IUser;
+      //     } else {
+      //       return null;
+      //     }
+      //   }
+      //   return null;
+      // }
+
+      if (!response.ok) {
+        return null;
+      }
+
+      return (await response.json()).user as IUser;
     } catch (error) {
       console.error("Error checking auth status:", error);
       return null;

@@ -9,8 +9,6 @@ const ManySelectedButton = () => {
   const { manyRowsClicked, setManyRowsClicked } = useContext(TableContext);
   const { archiveMultipleRows } = useData();
 
-  console.log(manyRowsClicked);
-
   if (manyRowsClicked.length > 0)
     return (
       <>

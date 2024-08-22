@@ -11,13 +11,13 @@ export const formattedData = (responseData, hiddenItems) =>
   responseData?.map((row) => {
     let rawDates = {
       rawDateApplied: row.date_applied,
-      rawDateSaved: row.date_saved,
+      rawDateSaved: row.logs,
     };
     const shownContent = {};
     const hiddenContent = {};
     Object.keys(row).forEach((key) => {
       let content = row[key];
-      if (key === "date_saved" || key === "date_applied") {
+      if (key === "date_applied") {
         content = formatDate(row[key]);
       }
       if (hiddenItems.includes(key)) {

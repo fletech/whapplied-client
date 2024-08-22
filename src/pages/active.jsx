@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Dashboard from "../components/Dashboard";
+import TableContainer from "../components/TableContainer";
 import { SessionContext } from "../context/sessionContext";
 import Heading from "../components/Heading";
 import DefaultHeading from "../components/DefaultHeading";
@@ -13,7 +13,6 @@ const ActivePage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
   const { setPageFilter } = useContext(TableContext);
-  const { getSpreadsheetData } = useData();
 
   useEffect(() => {
     setPageFilter("active");
@@ -23,10 +22,11 @@ const ActivePage = () => {
   if (!user) {
     return <DefaultHeading />;
   }
+
   return (
     <article className="OverviewPage w-full h-full ">
       <section className="flex flex-col mb-8 items-center justify-start w-full h-full ">
-        <Dashboard filter={"rejected"} />
+        <TableContainer filter={"rejected"} />
       </section>
     </article>
   );

@@ -39,5 +39,22 @@ export const useAuth = (authService: IAuthService = auth) => {
     navigate("/");
   }, [authService, checkAuthStatus, navigate]);
 
-  return { login, logout, checkAuthStatus };
+  const handleApiError = async (error) => {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 400)
+    ) {
+      try {
+        await checkAuthStatus(); // Intenta refrescar el token
+        return true; // Indica que se debe reintentar la solicitud
+      } catch (refreshError) {
+        console.error("Error refreshing token:", refreshError);
+        logout(); // Si no se puede refrescar, cierra la sesión
+        return false;
+      }
+    }
+    return false;
+  };
+
+  return { login, logout, checkAuthStatus, handleApiError };
 };

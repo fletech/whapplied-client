@@ -26,7 +26,7 @@ export const statuses = [
   { value: "applied", label: "Applied", color: "#4169E1" }, // RoyalBlue
   { value: "screening", label: "Screening call", color: "#00CED1" }, // DodgerBlue
   { value: "interviewing", label: "Interviewing", color: "#3CB371" }, // DarkTurquoise
-  { value: "waitingOffer", label: "Waiting for an offer", color: "#8a3ffc" }, // LightSeaGreen
+  { value: "waitingOffer", label: "Waiting offer", color: "#8a3ffc" }, // LightSeaGreen
   { value: "offer", label: "Got Offer", color: "#ff832b" }, // MediumSeaGreen
   { value: "accepted", label: "Accepted!", color: "#32CD32" }, // LimeGreen
   { value: "declined", label: "Declined", color: "#BB1738" }, // Red

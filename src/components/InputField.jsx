@@ -13,7 +13,9 @@ const formatDateForInput = (milliseconds) => {
 const InputField = ({ label, name, type, required, options, control }) => {
   return (
     <div className="flex flex-col items-start w-full">
-      <label className="text-custom-blue font-light pl-2">{name}</label>
+      <label className="font-extrabold text-sm text-soft-black uppercase  ">
+        {name}
+      </label>
 
       <Controller
         name={label}
@@ -33,6 +35,7 @@ const InputField = ({ label, name, type, required, options, control }) => {
                 onChange={(selected) =>
                   field.onChange(selected ? selected.value : null)
                 }
+                defaultValue={""}
               />
             ) : type === "date" ? (
               <input
@@ -48,7 +51,7 @@ const InputField = ({ label, name, type, required, options, control }) => {
             ) : type === "textarea" ? (
               <textarea
                 {...field}
-                className={`${inputStyle} max-h-24 resize-y min-h-18 h-auto`}
+                className={`${inputStyle} max-h-48 resize-y min-h-30 h-auto`}
               />
             ) : (
               <input {...field} type={type} className={inputStyle} />

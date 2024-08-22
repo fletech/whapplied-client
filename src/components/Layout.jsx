@@ -6,12 +6,18 @@ import { Link } from "react-router-dom";
 import AuthButton from "./AuthButton";
 import Modal from "./Modal";
 import Sidebar from "./Sidebar";
+import useModal from "../hooks/useModal";
+import { TableContext } from "../context/tableContext";
+import RowForm from "./RowForm";
+import TableRowDetails from "./TableRowDetails";
 
 const Layout = ({ children }) => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
   const isLogged = user !== null;
   const [trigger, setTrigger] = useState(false);
+  const { closeModal } = useModal();
+  const { modalState } = useContext(TableContext);
 
   const headerHeight = "10vh";
   return (
@@ -24,18 +30,9 @@ const Layout = ({ children }) => {
         >
           {children}
         </div>
-        <Modal trigger={trigger} onClose={() => setTrigger(false)}>
-          {trigger && (
-            <div className="flex flex-col items-center justify-center w-full">
-              <img
-                src={user.avatarUrl}
-                alt="User Avatar"
-                className="rounded-full w-20 h-20"
-              />
-              <p className="text-xl font-bold mt-4">{user.name}</p>
-              <p className="text-sm text-gray-500">{user.email}</p>
-            </div>
-          )}
+
+        <Modal trigger={modalState.trigger} onClose={() => closeModal()}>
+          {modalState.children}
         </Modal>
       </article>
     </main>

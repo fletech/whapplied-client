@@ -1,29 +1,39 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 
 import { formattedData, formattedHeaders } from "../lib/formatTableData";
+import { set } from "react-hook-form";
+import useData from "../hooks/useData";
+import sortDataByDate from "../lib/sortDataByDate";
 
-const TableContext = createContext();
+export const TableContext = createContext();
 
-const TableProvider = ({ children }) => {
+export const TableProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [rowClicked, setRowClicked] = useState("");
   const [pageFilter, setPageFilter] = useState(null);
   const [manyRowsClicked, setManyRowsClicked] = useState([]);
   const [rowData, setRowData] = useState({});
-  const [modalState, setModalState] = useState({ type: "", trigger: false });
+  const [modalState, setModalState] = useState({
+    type: "",
+    trigger: false,
+    children: null,
+  });
 
   const [tableData, setTableData] = useState({
     response: null,
     sortedData: null,
     filteredHeaders: null,
     filteredData: null,
+    setSearch: null,
   });
+
+  const [previousData, setPreviousData] = useState(null);
 
   const [hiddenItems, setHiddenItems] = useState([
     "url",
     "id",
-    "date_saved",
+    "logs",
     "description",
     "stage",
   ]);
@@ -35,20 +45,18 @@ const TableProvider = ({ children }) => {
     "status",
     "stage",
   ]);
-
-  // const renderModalChildren = (type, { props }) => {
-  //   const componentsTypes = {
-  //     new: <RowForm type={type} />,
-  //     details: <TableRowDetails {...props} />,
-  //   };
-  //   return componentsTypes[type];
-  // };
+  const [sortDirection, setSortDirection] = useState("desc");
 
   const updateTableState = (newState) => {
-    setTableData((prevState) => ({
-      ...prevState,
-      ...newState,
-    }));
+    setTableData((prevState) => {
+      const updatedState = { ...prevState, ...newState };
+      console.log("Estado de la tabla actualizado:", updatedState);
+      return updatedState;
+    });
+  };
+
+  const toggleSortDirection = () => {
+    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
   function optimisticTableUpdated() {
@@ -69,26 +77,33 @@ const TableProvider = ({ children }) => {
     };
   }
 
-  const updateRowStatus = (rowId, newStatus) => {
-    setTableData((prevState) => {
-      const updatedSortedData = prevState.sortedData.map((row) =>
-        row.hiddenContent.id === rowId
-          ? { ...row, shownContent: { ...row.shownContent, status: newStatus } }
-          : row
-      );
+  // const updateRowStatus = (rowId, newStatus, optimisticUpdatedLogsInDB) => {
+  //   setTableData((prevState) => {
+  //     const updatedSortedData = prevState.sortedData.map((row) =>
+  //       row.hiddenContent.id === rowId
+  //         ? {
+  //             ...row,
+  //             // shownContent: { ...row.shownContent, status: newStatus },
+  //             // hiddenContent: {
+  //             //   ...row.hiddenContent,
+  //             //   logs: optimisticUpdatedLogsInDB,
+  //             // },
+  //           }
+  //         : row
+  //     );
 
-      const updatedFilteredData = filterDataByPage(
-        updatedSortedData,
-        pageFilter
-      );
+  //     const updatedFilteredData = filterDataByPage(
+  //       updatedSortedData,
+  //       pageFilter
+  //     );
 
-      return {
-        ...prevState,
-        sortedData: updatedSortedData,
-        filteredData: updatedFilteredData,
-      };
-    });
-  };
+  //     return {
+  //       ...prevState,
+  //       sortedData: updatedSortedData,
+  //       filteredData: updatedFilteredData,
+  //     };
+  //   });
+  // };
 
   const filterDataByPage = (data, filter) => {
     if (filter === "rejected") {
@@ -107,35 +122,75 @@ const TableProvider = ({ children }) => {
 
     return data; // for "overview" or any other case
   };
+  +useEffect(() => {
+    if (!tableData.response) return;
 
-  useEffect(() => {
-    if (tableData.sortedData) {
-      const filteredData = filterDataByPage(tableData.sortedData, pageFilter);
-      setTableData((prevState) => ({ ...prevState, filteredData }));
-    }
-  }, [pageFilter, tableData.sortedData]);
-
-  useEffect(() => {
-    if (!tableData.response) {
-      return;
-    }
-    const sortedData = formattedData(tableData.response?.data, hiddenItems);
-
+    const sortedData = formattedData(tableData.response.data, hiddenItems);
     const filteredHeaders = formattedHeaders(
-      tableData.response?.headers,
+      tableData.response.headers,
       hiddenItems
     );
 
-    updateTableState({ sortedData, filteredHeaders });
-  }, [tableData.response]);
+    const newSortedData = sortDataByDate(sortedData, sortDirection);
+    const filteredData = filterDataByPage(newSortedData, pageFilter);
+
+    updateTableState({
+      sortedData: newSortedData,
+      filteredData,
+      filteredHeaders,
+    });
+  }, [tableData.response, sortDirection, pageFilter, hiddenItems]);
 
   useEffect(() => {
-    if (!rowClicked) return;
+    if (!rowClicked || !tableData.sortedData) return;
 
-    tableData.sortedData?.map((rowDetails, rowIndex) => {
-      rowClicked === rowDetails.hiddenContent.id && setRowData(rowDetails);
-    });
+    const selectedRow = tableData.sortedData.find(
+      (rowDetails) => rowClicked === rowDetails.hiddenContent.id
+    );
+
+    if (selectedRow) {
+      setRowData(selectedRow);
+    }
   }, [rowClicked, tableData.sortedData]);
+
+  //useEffect(() => {
+  //  if (tableData.sortedData) {
+  //    const sortedData = sortDataByDate(tableData.sortedData, sortDirection);
+  //    updateTableState({ sortedData });
+  //  }
+  //}, [sortDirection, tableData.response]);
+  //
+  //useEffect(() => {
+  //  if (tableData.sortedData) {
+  //    const filteredData = filterDataByPage(tableData.sortedData, pageFilter);
+  //    setTableData((prevState) => ({ ...prevState, filteredData }));
+  //  }
+  //}, [pageFilter, tableData.sortedData]);
+  //
+  //useEffect(() => {
+  //  if (!tableData.response) {
+  //    return;
+  //  }
+  //  const sortedData = formattedData(tableData.response?.data, hiddenItems);
+  //
+  //  const filteredHeaders = formattedHeaders(
+  //    tableData.response?.headers,
+  //    hiddenItems
+  //  );
+  //
+  //  // console.log("previousData", previousData.response?.data);
+  //  // console.log("tableData", tableData.response?.data);
+  //
+  //  updateTableState({ sortedData, filteredHeaders });
+  //}, [tableData.response]);
+  //
+  //useEffect(() => {
+  //  if (!rowClicked) return;
+  //
+  //  tableData.sortedData?.map((rowDetails, rowIndex) => {
+  //    rowClicked === rowDetails.hiddenContent.id && setRowData(rowDetails);
+  //  });
+  //}, [rowClicked, tableData.sortedData]);
 
   const value = useMemo(
     () => ({
@@ -156,7 +211,9 @@ const TableProvider = ({ children }) => {
       optimisticTableUpdated,
       pageFilter,
       setPageFilter,
-      updateRowStatus,
+      // updateRowStatus,
+      toggleSortDirection,
+      sortDirection,
     }),
     [
       tableData,
@@ -176,7 +233,8 @@ const TableProvider = ({ children }) => {
       optimisticTableUpdated,
       pageFilter,
       setPageFilter,
-      updateRowStatus,
+      // updateRowStatus,
+      sortDirection,
     ]
   );
 
@@ -184,5 +242,3 @@ const TableProvider = ({ children }) => {
     <TableContext.Provider value={value}>{children}</TableContext.Provider>
   );
 };
-
-export { TableProvider, TableContext };

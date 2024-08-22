@@ -7,15 +7,16 @@ const Heading = ({ user }) => {
     return null;
   }
   return (
-    <div className="Heading">
-      <h1 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h1>
-      <p>Email: {user.email}</p>
-
+    <div className="flex items-center gap-4">
       <img
         src={user.avatarUrl}
         alt="User Avatar"
-        className="mt-4 rounded-full w-16 h-16"
+        className=" rounded-full size-12"
       />
+      <div className="Heading flex flex-col items-center">
+        <h1 className="text-xl font-bold">Welcome, {user.name}!</h1>
+        <p>{user.email}</p>
+      </div>
     </div>
   );
 };

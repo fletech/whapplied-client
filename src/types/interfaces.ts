@@ -10,7 +10,7 @@ export interface IRowDetails {
   hiddenContent: {
     id: string;
     url: string;
-    date_saved: number;
+    logs: JSON;
     description: string;
     rawDates: {
       rawDateApplied: number;
@@ -40,7 +40,7 @@ export interface ITable {
   hiddenContent: {
     id: string;
     url: string;
-    date_saved: number;
+    logs: JSON;
     description: string;
     rawDates: {
       rawDateApplied: number;

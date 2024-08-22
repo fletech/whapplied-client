@@ -40,7 +40,8 @@ const Table = () => {
   }
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-full w-full">
+      <div className="flex justify-center items-center h-full w-full gap-4">
+        <span className=" animate-ping size-2 rounded-full bg-custom-blue"></span>
         Loading
       </div>
     );
@@ -49,18 +50,19 @@ const Table = () => {
   return (
     <section className="w-auto h-auto z-100 relative ">
       <table
-        className={`table-auto text-soft-black w-full border-collapse relative bg-white ${
+        className={`table-fixed text-soft-black w-full border-collapse relative bg-white ${
           rowClicked !== "" ? "pointer-events-none" : ""
         }`}
       >
-        <thead className="sticky top-[10vh] rounded-xl bg-light-gray z-10 opacity-95 ">
+        <thead className="sticky top-[10vh] rounded-xl bg-light-gray z-10 opacity-95  w-full">
           <tr>
-            <th className="py-2 px-4 w-10">
+            <th className="py-2 px-4 w-8">
               <input
+                name="checkbox"
                 type="checkbox"
                 checked={allChecked}
                 onChange={handleSelectAll}
-                className="w-4 h-4"
+                className="w-5 h-5 mt-1"
               />
             </th>
             <TableHeaders />
