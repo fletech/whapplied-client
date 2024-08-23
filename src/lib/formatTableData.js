@@ -5,7 +5,12 @@ export const formattedHeaders = (responseHeaders, hiddenItems) =>
     ?.filter((header) => {
       return !hiddenItems.includes(header);
     })
-    .map((headerLowCase) => headerLowCase.toUpperCase().replace("_", " "));
+    .map((headerLowCase) => {
+      return {
+        title: headerLowCase.toUpperCase().replace("_", " "),
+        key: headerLowCase,
+      };
+    });
 
 export const formattedData = (responseData, hiddenItems) =>
   responseData?.map((row) => {

@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useMemo, useState } from "react";
 import { formattedData, formattedHeaders } from "../lib/formatTableData";
 import { set } from "react-hook-form";
 import useData from "../hooks/useData";
-import sortDataByDate from "../lib/sortDataByDate";
+import { sortDataByDate, sortDataByString } from "../lib/headerSortData.js";
 
 export const TableContext = createContext();
 
@@ -28,8 +28,6 @@ export const TableProvider = ({ children }) => {
     setSearch: null,
   });
 
-  const [previousData, setPreviousData] = useState(null);
-
   const [hiddenItems, setHiddenItems] = useState([
     "url",
     "id",
@@ -46,11 +44,12 @@ export const TableProvider = ({ children }) => {
     "stage",
   ]);
   const [sortDirection, setSortDirection] = useState("desc");
+  const [sortColumn, setSortColumn] = useState("date_applied");
 
   const updateTableState = (newState) => {
     setTableData((prevState) => {
       const updatedState = { ...prevState, ...newState };
-      console.log("Estado de la tabla actualizado:", updatedState);
+      // console.log("Estado de la tabla actualizado:", updatedState);
       return updatedState;
     });
   };
@@ -122,7 +121,19 @@ export const TableProvider = ({ children }) => {
 
     return data; // for "overview" or any other case
   };
-  +useEffect(() => {
+
+  const toggleSort = (column) => {
+    if (column === sortColumn) {
+      // Si es la misma columna, cambia la dirección
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      // Si es una columna diferente, establece la nueva columna y dirección ascendente por defecto
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  useEffect(() => {
     if (!tableData.response) return;
 
     const sortedData = formattedData(tableData.response.data, hiddenItems);
@@ -131,7 +142,13 @@ export const TableProvider = ({ children }) => {
       hiddenItems
     );
 
-    const newSortedData = sortDataByDate(sortedData, sortDirection);
+    let newSortedData;
+    if (sortColumn === "date_applied") {
+      newSortedData = sortDataByDate(sortedData, sortDirection);
+    } else {
+      newSortedData = sortDataByString(sortedData, sortColumn, sortDirection);
+    }
+
     const filteredData = filterDataByPage(newSortedData, pageFilter);
 
     updateTableState({
@@ -139,7 +156,7 @@ export const TableProvider = ({ children }) => {
       filteredData,
       filteredHeaders,
     });
-  }, [tableData.response, sortDirection, pageFilter, hiddenItems]);
+  }, [tableData.response, sortDirection, sortColumn, pageFilter, hiddenItems]);
 
   useEffect(() => {
     if (!rowClicked || !tableData.sortedData) return;
@@ -214,6 +231,8 @@ export const TableProvider = ({ children }) => {
       // updateRowStatus,
       toggleSortDirection,
       sortDirection,
+      toggleSort,
+      sortColumn,
     }),
     [
       tableData,
@@ -235,6 +254,8 @@ export const TableProvider = ({ children }) => {
       setPageFilter,
       // updateRowStatus,
       sortDirection,
+      toggleSort,
+      sortColumn,
     ]
   );
 

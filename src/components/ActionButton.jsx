@@ -1,5 +1,5 @@
 const ActionButton = (props) => {
-  const { onClick, hoverBorderColor, tooltip, children } = props;
+  const { onClick, hoverBorderColor, tooltip, children, extraStyle } = props;
   return (
     <div className="group relative">
       <button

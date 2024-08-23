@@ -33,5 +33,15 @@ const sortDataByDate = (data, direction) => {
     return 0;
   });
 };
+const sortDataByString = (data, column, direction) => {
+  return [...data].sort((a, b) => {
+    const valueA = a.shownContent[column].toLowerCase();
+    const valueB = b.shownContent[column].toLowerCase();
 
-export default sortDataByDate;
+    if (valueA < valueB) return direction === "asc" ? -1 : 1;
+    if (valueA > valueB) return direction === "asc" ? 1 : -1;
+    return 0;
+  });
+};
+
+export { sortDataByDate, sortDataByString };

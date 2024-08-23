@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { TableContext } from "../context/tableContext";
 import { BiSolidArchive } from "react-icons/bi";
 import { MdOutlineArchive } from "react-icons/md";
+import { MdOutlineUnarchive } from "react-icons/md";
 import { MdOutlineHistory } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
 import { LuTrash2 } from "react-icons/lu";
@@ -14,6 +15,8 @@ const TableRowDetails = () => {
   const [edit, setEdit] = useState(true);
   const { deleteRow, archiveRow } = useData();
   const [showHistoryLogs, setShowHistoryLogs] = useState(false);
+
+  const isArchived = rowData.hiddenContent?.stage === "2";
 
   return (
     modalState.trigger && (
@@ -32,11 +35,17 @@ const TableRowDetails = () => {
                 <ActionButton
                   onClick={async () => archiveRow(rowClicked)}
                   hoverBorderColor="green"
-                  tooltip="Archive"
+                  tooltip={isArchived ? "Unarchive" : "Archive"}
                 >
-                  <MdOutlineArchive
-                    className={`group-hover:text-green text-xl`}
-                  />
+                  {isArchived ? (
+                    <MdOutlineUnarchive
+                      className={`group-hover:text-green text-xl`}
+                    />
+                  ) : (
+                    <MdOutlineArchive
+                      className={`group-hover:text-green text-xl`}
+                    />
+                  )}
                 </ActionButton>
                 <ActionButton
                   onClick={async () => setShowHistoryLogs(!showHistoryLogs)}

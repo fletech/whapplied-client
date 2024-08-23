@@ -1,14 +1,40 @@
-import React, { useContext } from "react";
+import React, { Component, useContext } from "react";
 import { TableContext } from "../context/tableContext";
 
 import { MdDeleteForever } from "react-icons/md";
 import { BiSolidArchive } from "react-icons/bi";
+import { MdOutlineArchive } from "react-icons/md";
+import { MdOutlineUnarchive } from "react-icons/md";
+
 import useData from "../hooks/useData";
 
 const ManySelectedButton = () => {
   const { manyRowsClicked, setManyRowsClicked } = useContext(TableContext);
-  const { archiveMultipleRows } = useData();
+  const { archiveMultipleRows, getBulkAction } = useData();
 
+  const { bulkAction } = getBulkAction();
+
+  const actionContent = () => {
+    return {
+      archiveManyRows: {
+        Icon: <MdOutlineArchive />,
+        text: "Archive",
+      },
+      unarchiveManyRows: {
+        Icon: <MdOutlineUnarchive />,
+        text: "Unarchive",
+      },
+    };
+  };
+
+  const Icon = () => {
+    const object = actionContent()[bulkAction];
+    return object.Icon;
+  };
+  const Text = () => {
+    const object = actionContent()[bulkAction];
+    return <p className="ml-2 font-semibold">{object.text}</p>;
+  };
   if (manyRowsClicked.length > 0)
     return (
       <>
@@ -30,9 +56,15 @@ const ManySelectedButton = () => {
             onClick={() => archiveMultipleRows()}
           >
             <div className="mb-[0.3px]">
-              <BiSolidArchive />
+              {bulkAction === "archiveManyRows" ? (
+                <MdOutlineArchive />
+              ) : (
+                <MdOutlineUnarchive />
+              )}
             </div>
-            <p className="ml-2 font-semibold">Archive</p>
+            <p className="ml-2 font-semibold">
+              {bulkAction === "archiveManyRows" ? "Archive" : "Unarchive"}
+            </p>
           </button>
         </div>
         <div className="ml-2 flex items-center ">

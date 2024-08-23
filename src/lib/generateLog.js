@@ -24,32 +24,49 @@ export const generateLog = (action, options) => {
   }
 
   if (action === "archiveRow") {
+    console.log(options);
+    const { stage } = options;
+    console.log(stage);
+    //stage es un numero 2 para achivado 1 para activo
     diffValues = [
       {
         field: "stage",
-        previous: "active",
-        current: "archived",
+        previous: stage === "2" ? "archived" : "active",
+        current: stage === "2" ? "active" : "archived",
       },
     ];
   }
 
-  // if (action === "archiveMultipleRows") {
-  //   const { selectedRows } = options;
-  //   const { data } = options;
-  //   console.log(selectedRows);
-  //   console.log(data);
-  //   const dataSelectedRows = data.map((row) => ({
-  //     ...row,
-  //     stage: "archived",
-  //   }));
-  //   diffValues = [
-  //     {
-  //       field: "stage",
-  //       previous: "active",
-  //       current: "archived",
-  //     },
-  //   ];
-  // }
-  console.log(diffValues);
+  if (action === "archiveManyRows") {
+    console.log(options);
+    const { isAllActive, isAllArchived, isMixed } = options;
+
+    // const isAllActive = dataFiltered.every((item) => item.stage === "1");
+    // const isAllArchived = dataFiltered.every((item) => item.stage === "2");
+    // const isMixed = dataFiltered.some(
+    //   (item) => item.stage === "1" || item.stage === "2"
+    // );
+
+    if (isAllActive || isMixed) {
+      diffValues = [
+        {
+          field: "stage",
+          previous: "active",
+          current: "archived",
+        },
+      ];
+    }
+
+    if (isAllArchived) {
+      diffValues = [
+        {
+          field: "stage",
+          previous: "archived",
+          current: "active",
+        },
+      ];
+    }
+  }
+
   return [diffValues];
 };

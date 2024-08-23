@@ -9,6 +9,7 @@ import { redirect } from "react-router-dom";
 
 const useData = () => {
   const [hasFetchedData, setHasFetchedData] = useState(false);
+
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
   const {
@@ -19,6 +20,7 @@ const useData = () => {
     optimisticTableUpdated,
     manyRowsClicked,
     setManyRowsClicked,
+    rowData,
   } = useContext(TableContext);
   const { closeModal } = useModal();
   const { handleApiError } = useAuth();
@@ -153,20 +155,25 @@ const useData = () => {
   };
 
   const archiveRow = async (id) => {
-    const rowData = tableData.response.data.filter((item) => item.id === id);
+    const rowDataFlat = tableData.response.data.filter(
+      (item) => item.id === id
+    );
 
     // optimisticTableUpdated().filterDeletedItem(id);
-    const [diffValues] = generateLog("archiveRow", { rowData });
+    const [diffValues] = generateLog("archiveRow", {
+      stage: rowDataFlat[0].stage,
+    });
+
     try {
       setLoading(true);
       const response = await axios.put("/api/v1/data/archive-item", {
         ...apiOptions,
         id,
-        rowData: rowData[0],
+        rowData: rowDataFlat[0],
         diffValues: diffValues,
       });
 
-      // setLoading(true);
+      setLoading(true);
       await getSpreadsheetData();
       closeModal();
     } catch (err) {
@@ -175,22 +182,72 @@ const useData = () => {
     }
   };
 
-  const archiveMultipleRows = async () => {
-    // optimisticTableUpdated().filterDeletedItem(id);
-    // generateLog("archiveRow", {
-    //   selectedRows: manyRowsClicked,
-    //   data: tableData.response.data,
-    // });
+  // const getBulkAction = () => {
+  //   let bulkAction = "";
+  //   if (manyRowsClicked.length === 0) return { bulkAction };
 
-    const [diffValues] = generateLog("archiveRow");
+  //   let dataFiltered = [];
+  //   dataFiltered = manyRowsClicked.map((rowClickedId) => {
+  //     return tableData.response.data.filter(
+  //       (item) => rowClickedId === item.id
+  //     )[0];
+  //   });
+  //   const isAllActive = dataFiltered.every((item) => item.stage === "1");
+  //   const isAllArchived = dataFiltered.every((item) => item.stage === "2");
+  //   const isMixed = dataFiltered.some(
+  //     (item) => item.stage === "1" || item.stage === "2"
+  //   );
 
-    const dataFiltered = manyRowsClicked.map((rowClickedId) => {
-      return tableData.response.data.filter(
-        (item) => rowClickedId === item.id
-      )[0];
-    });
+  //   if (isAllArchived) {
+  //     bulkAction = "unarchiveManyRows";
+  //     dataFiltered = dataFiltered.filter((item) => item.stage === "2");
+  //     return { dataFiltered, bulkAction, isAllActive, isAllArchived, isMixed };
+  //   }
 
+  //   if (isAllActive || isMixed) {
+  //     bulkAction = "archiveManyRows";
+  //     dataFiltered = dataFiltered.filter((item) => item.stage === "1");
+  //     return { dataFiltered, bulkAction, isAllActive, isAllArchived, isMixed };
+  //   }
+
+  // };
+
+  const getBulkAction = () => {
+    if (manyRowsClicked.length === 0) return { bulkAction: "" };
+
+    const filteredData = manyRowsClicked
+      .map((id) => tableData.response.data.find((item) => item.id === id))
+      .filter(Boolean);
+
+    const activeItems = filteredData.filter((item) => item.stage === "1");
+    const archivedItems = filteredData.filter((item) => item.stage === "2");
+
+    const isAllActive = activeItems.length === filteredData.length;
+    const isAllArchived = archivedItems.length === filteredData.length;
+    const isMixed = !isAllActive && !isAllArchived;
+
+    let bulkAction, dataFiltered;
+
+    if (isAllArchived) {
+      bulkAction = "unarchiveManyRows";
+      dataFiltered = archivedItems;
+    } else {
+      bulkAction = "archiveManyRows";
+      dataFiltered = activeItems;
+    }
     console.log(dataFiltered);
+    return { dataFiltered, bulkAction, isAllActive, isAllArchived, isMixed };
+  };
+
+  const archiveMultipleRows = async () => {
+    const { bulkAction, dataFiltered, isAllActive, isAllArchived, isMixed } =
+      getBulkAction();
+
+    const [diffValues] = generateLog("archiveManyRows", {
+      isAllActive,
+      isAllArchived,
+      isMixed,
+    });
 
     setLoading(true);
     try {
@@ -199,9 +256,9 @@ const useData = () => {
         ids: manyRowsClicked,
         dataFiltered: dataFiltered,
         diffValues: diffValues,
+        bulkAction: bulkAction,
       });
 
-      // setLoading(true);
       await getSpreadsheetData();
       setManyRowsClicked([]);
     } catch (err) {
@@ -228,6 +285,7 @@ const useData = () => {
     deleteRow,
     archiveRow,
     archiveMultipleRows,
+    getBulkAction,
   };
 };
 
