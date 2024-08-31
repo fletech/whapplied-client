@@ -98,7 +98,6 @@ const procesarDatos = (datos, type) => {
 };
 
 const opciones = (isModalOpen) => {
-  console.log(isModalOpen);
   return {
     bar: {
       responsive: true,

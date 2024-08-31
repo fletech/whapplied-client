@@ -7,7 +7,7 @@ const DefaultHeading = () => {
   const { loading } = useContext(TableContext);
   const { user } = useContext(SessionContext);
 
-  if (!loading) {
+  if (!loading && !user) {
     return (
       <div className="h-full w-full flex flex-col justify-center items-center">
         <p>You must be logged in to see this page.</p>

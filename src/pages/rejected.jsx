@@ -9,8 +9,6 @@ import useData from "../hooks/useData";
 import { TableContext } from "../context/tableContext";
 
 const RejectedPage = () => {
-  const { sessionState } = useContext(SessionContext);
-  const { user } = sessionState;
   const { setPageFilter } = useContext(TableContext);
 
   useEffect(() => {
@@ -18,9 +16,7 @@ const RejectedPage = () => {
   }, []);
 
   // const [triggerNewRow, setTriggerNewRow] = useState(false);
-  if (!user) {
-    return <DefaultHeading />;
-  }
+
   return (
     <article className="OverviewPage w-full h-full ">
       <section className="flex flex-col mb-8 items-center justify-start w-full h-full ">

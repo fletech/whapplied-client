@@ -9,24 +9,53 @@ import { TableProvider } from "./context/tableContext.jsx";
 import ArchivedPage from "./pages/archived.jsx";
 import ActivePage from "./pages/active.jsx";
 import RejectedPage from "./pages/rejected.jsx";
+import AuthGuard from "./components/AuthGuard.jsx";
 
 function App() {
   return (
-    <SessionProvider>
-      <TableProvider>
-        <Router>
+    <Router>
+      <SessionProvider>
+        <TableProvider>
           <Layout>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/overview" element={<OverviewPage />} />
-              <Route path="/archived" element={<ArchivedPage />} />
-              <Route path="/rejected" element={<RejectedPage />} />
-              <Route path="/active" element={<ActivePage />} />
+              <Route
+                path="/overview"
+                element={
+                  <AuthGuard>
+                    <OverviewPage />
+                  </AuthGuard>
+                }
+              />
+              <Route
+                path="/archived"
+                element={
+                  <AuthGuard>
+                    <ArchivedPage />
+                  </AuthGuard>
+                }
+              />
+              <Route
+                path="/rejected"
+                element={
+                  <AuthGuard>
+                    <RejectedPage />
+                  </AuthGuard>
+                }
+              />
+              <Route
+                path="/active"
+                element={
+                  <AuthGuard>
+                    <ActivePage />
+                  </AuthGuard>
+                }
+              />
             </Routes>
           </Layout>
-        </Router>
-      </TableProvider>
-    </SessionProvider>
+        </TableProvider>
+      </SessionProvider>
+    </Router>
   );
 }
 
