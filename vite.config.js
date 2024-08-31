@@ -19,7 +19,7 @@ import react from "@vitejs/plugin-react";
 import dotenv from "dotenv";
 dotenv.config();
 
-const apiProxy = process.env.VITE_API_PROXY || "http://localhost:3000";
+const apiProxy = "https://whapplied-server.vercel.app/";
 
 export default defineConfig({
   plugins: [react()],
