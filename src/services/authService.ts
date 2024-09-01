@@ -3,15 +3,18 @@ import { IAuthService, IUser } from "../types/interfaces";
 
 export class AuthService implements IAuthService {
   login(): void {
-    window.location.href = `/api/v1/auth/google`;
+    window.location.href = `https://whapplied-client.vercel.app/api/v1/auth/google`;
   }
 
   async logout(): Promise<void> {
     try {
-      const response = await fetch(`/api/v1/auth/logout`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://whapplied-client.vercel.app/api/v1/auth/logout`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error("Logout failed");
       }
@@ -23,7 +26,7 @@ export class AuthService implements IAuthService {
 
   // async checkAuthStatus(): Promise<IUser | null> {
   //   try {
-  //     const response = await fetch(`/api/v1/auth/me`, {
+  //     const response = await fetch(`https://whapplied-client.vercel.app/api/v1/auth/me`, {
   //       method: "GET",
   //       credentials: "include",
   //       headers: {
@@ -40,21 +43,24 @@ export class AuthService implements IAuthService {
   // }
   async checkAuthStatus(): Promise<IUser | null> {
     try {
-      const response = await fetch(`/api/v1/auth/me`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://whapplied-client.vercel.app/api/v1/auth/me`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // if (!response.ok) {
       //   if (response.status === 401) {
       //     console.log("Token has expired, attempting to refresh...");
       //     // Intentamos forzar la revalidación si se recibe un 401
       //     // El middleware del backend debería revalidar y devolver un nuevo token
-      //     const refreshResponse = await fetch(`/api/v1/auth/me`, {
+      //     const refreshResponse = await fetch(`https://whapplied-client.vercel.app/api/v1/auth/me`, {
       //       method: "GET",
       //       credentials: "include",
       //       headers: {

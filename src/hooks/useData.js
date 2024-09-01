@@ -59,7 +59,7 @@ const useData = () => {
   const getSpreadsheetData = async () => {
     try {
       const response = await axios.post(
-        "/api/v1/data/spreadsheet-data",
+        "https://whapplied-client.vercel.app/api/v1/data/spreadsheet-data",
         apiOptions,
         { withCredentials: true }
       );
@@ -91,10 +91,13 @@ const useData = () => {
       try {
         setLoading(true);
         // optimisticTableUpdated().showNewItem(data);
-        const response = await axios.post("/api/v1/data/new-record", {
-          ...apiOptions,
-          data,
-        });
+        const response = await axios.post(
+          "https://whapplied-client.vercel.app/api/v1/data/new-record",
+          {
+            ...apiOptions,
+            data,
+          }
+        );
 
         if (response.status !== 200) {
           throw new Error("Error saving new item");
@@ -114,10 +117,13 @@ const useData = () => {
     // optimisticTableUpdated().filterDeletedItem(id);
     try {
       setLoading(true);
-      const response = await axios.put("/api/v1/data/delete-item", {
-        ...apiOptions,
-        id,
-      });
+      const response = await axios.put(
+        "https://whapplied-client.vercel.app/api/v1/data/delete-item",
+        {
+          ...apiOptions,
+          id,
+        }
+      );
       //por que tarda tanto en borrar????
 
       // setLoading(true);
@@ -140,11 +146,14 @@ const useData = () => {
     // data.logs = dataLog;
     try {
       setLoading(true);
-      const response = await axios.put("/api/v1/data/update-row", {
-        ...apiOptions,
-        data,
-        diffValues: diffValues,
-      });
+      const response = await axios.put(
+        "https://whapplied-client.vercel.app/api/v1/data/update-row",
+        {
+          ...apiOptions,
+          data,
+          diffValues: diffValues,
+        }
+      );
       // setLoading(true);
       getSpreadsheetData();
       closeModal();
@@ -166,12 +175,15 @@ const useData = () => {
 
     try {
       setLoading(true);
-      const response = await axios.put("/api/v1/data/archive-item", {
-        ...apiOptions,
-        id,
-        rowData: rowDataFlat[0],
-        diffValues: diffValues,
-      });
+      const response = await axios.put(
+        "https://whapplied-client.vercel.app/api/v1/data/archive-item",
+        {
+          ...apiOptions,
+          id,
+          rowData: rowDataFlat[0],
+          diffValues: diffValues,
+        }
+      );
 
       setLoading(true);
       await getSpreadsheetData();
@@ -251,13 +263,16 @@ const useData = () => {
 
     setLoading(true);
     try {
-      const response = await axios.put("/api/v1/data/archive-multiple-items", {
-        ...apiOptions,
-        ids: manyRowsClicked,
-        dataFiltered: dataFiltered,
-        diffValues: diffValues,
-        bulkAction: bulkAction,
-      });
+      const response = await axios.put(
+        "https://whapplied-client.vercel.app/api/v1/data/archive-multiple-items",
+        {
+          ...apiOptions,
+          ids: manyRowsClicked,
+          dataFiltered: dataFiltered,
+          diffValues: diffValues,
+          bulkAction: bulkAction,
+        }
+      );
 
       await getSpreadsheetData();
       setManyRowsClicked([]);

@@ -21,16 +21,19 @@ const useSelected = (rowDetails) => {
       try {
         setErrorUI(false);
         setIsLoadingUI(true);
-        const response = await axios.post("/api/v1/data/update-status", {
-          accessToken: user.accessToken,
-          spreadSheetId: user.spreadSheetId,
-          id: rowId,
-          status: newStatus,
-          rowData: tableData.response.data.filter(
-            (item) => item.id === rowId
-          )[0],
-          diffValues: diffValues,
-        });
+        const response = await axios.post(
+          "https://whapplied-client.vercel.app/api/v1/data/update-status",
+          {
+            accessToken: user.accessToken,
+            spreadSheetId: user.spreadSheetId,
+            id: rowId,
+            status: newStatus,
+            rowData: tableData.response.data.filter(
+              (item) => item.id === rowId
+            )[0],
+            diffValues: diffValues,
+          }
+        );
 
         // const updatedLogs = JSON.parse(response.data[1].config.body).values[0];
         // return updatedLogs;
