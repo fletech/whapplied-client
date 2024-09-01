@@ -6,6 +6,7 @@ import useModal from "./useModal";
 import { useAuth } from "./useAuth";
 import { generateLog } from "../lib/generateLog";
 import { redirect } from "react-router-dom";
+import { AuthService } from "../services/authService";
 
 const useData = () => {
   const [hasFetchedData, setHasFetchedData] = useState(false);
@@ -23,7 +24,7 @@ const useData = () => {
     rowData,
   } = useContext(TableContext);
   const { closeModal } = useModal();
-  const { handleApiError } = useAuth();
+  // const { handleApiError } = useAuth();
 
   const apiOptions = {
     accessToken: user?.accessToken,
@@ -55,6 +56,23 @@ const useData = () => {
   //   //   newLog,
   //   // ]);º
   // };
+
+  const handleApiError = async (error) => {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 400)
+    ) {
+      try {
+        await AuthService.checkAuthStatus(); // Intenta refrescar el token
+        return true; // Indica que se debe reintentar la solicitud
+      } catch (refreshError) {
+        console.error("Error refreshing token:", refreshError);
+        logout(); // Si no se puede refrescar, cierra la sesión
+        return false;
+      }
+    }
+    return false;
+  };
 
   const getSpreadsheetData = async () => {
     try {
