@@ -43,6 +43,7 @@ export class AuthService implements IAuthService {
   //   }
   // }
   async checkAuthStatus(): Promise<IUser | null> {
+    console.log(BASE_URL);
     try {
       const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
         method: "GET",
