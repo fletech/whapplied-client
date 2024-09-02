@@ -7,15 +7,20 @@ const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
 
 export class AuthService implements IAuthService {
   login(): void {
-    window.location.href = `${BASE_URL}/api/v1/auth/google`;
+    window.location.href = `https://whapplied-server.vercel.app/api/v1/auth/google`;
+    // window.location.href = `${BASE_URL}/api/v1/auth/google`;
   }
 
   async logout(): Promise<void> {
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://whapplied-server.vercel.app/api/v1/auth/logout`,
+        {
+          // const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+          method: "GET",
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error("Logout failed");
       }
@@ -45,14 +50,18 @@ export class AuthService implements IAuthService {
   async checkAuthStatus(): Promise<IUser | null> {
     console.log(BASE_URL);
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://whapplied-server.vercel.app/api/v1/auth/me`,
+        {
+          method: "GET",
+          // const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // if (!response.ok) {
       //   if (response.status === 401) {

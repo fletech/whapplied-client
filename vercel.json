@@ -1,8 +1,1 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://whapplied-server.vercel.app/$1"
-    }
-  ]
-}
+{}
