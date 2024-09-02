@@ -7,12 +7,15 @@ import { useAuth } from "./useAuth";
 import { generateLog } from "../lib/generateLog";
 import { redirect } from "react-router-dom";
 import { AuthService } from "../services/authService";
+const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
 
 const useData = () => {
+  const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
   const [hasFetchedData, setHasFetchedData] = useState(false);
 
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
+  console.log(user);
   const {
     tableData,
     updateTableState,
@@ -29,6 +32,7 @@ const useData = () => {
   const apiOptions = {
     accessToken: user?.accessToken,
     spreadSheetId: user?.spreadSheetId,
+    user: user,
   };
 
   // const generateLog = (action, options) => {
@@ -77,7 +81,7 @@ const useData = () => {
   const getSpreadsheetData = async () => {
     try {
       const response = await axios.post(
-        "https://whapplied-client.vercel.app/api/v1/data/spreadsheet-data",
+        `${BASE_URL}/api/v1/data/spreadsheet-data`,
         apiOptions,
         { withCredentials: true }
       );
@@ -88,11 +92,11 @@ const useData = () => {
       setLoading(false);
       return await response.data;
     } catch (err) {
-      const shouldRetry = await handleApiError(err);
-      console.log(err);
-      if (shouldRetry) {
-        return await getSpreadsheetData(); // Reintenta la solicitud
-      }
+      // const shouldRetry = await handleApiError(err);
+      // console.log(err);
+      // if (shouldRetry) {
+      //   return await getSpreadsheetData(); // Reintenta la solicitud
+      // }
 
       console.error("Error fetching spreadsheet data:", err);
       setError("Failed to fetch data. Please try again later.");
@@ -110,7 +114,7 @@ const useData = () => {
         setLoading(true);
         // optimisticTableUpdated().showNewItem(data);
         const response = await axios.post(
-          "https://whapplied-client.vercel.app/api/v1/data/new-record",
+          `${BASE_URL}/api/v1/data/new-record`,
           {
             ...apiOptions,
             data,
@@ -135,13 +139,10 @@ const useData = () => {
     // optimisticTableUpdated().filterDeletedItem(id);
     try {
       setLoading(true);
-      const response = await axios.put(
-        "https://whapplied-client.vercel.app/api/v1/data/delete-item",
-        {
-          ...apiOptions,
-          id,
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/api/v1/data/delete-item`, {
+        ...apiOptions,
+        id,
+      });
       //por que tarda tanto en borrar????
 
       // setLoading(true);
@@ -164,14 +165,11 @@ const useData = () => {
     // data.logs = dataLog;
     try {
       setLoading(true);
-      const response = await axios.put(
-        "https://whapplied-client.vercel.app/api/v1/data/update-row",
-        {
-          ...apiOptions,
-          data,
-          diffValues: diffValues,
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/api/v1/data/update-row`, {
+        ...apiOptions,
+        data,
+        diffValues: diffValues,
+      });
       // setLoading(true);
       getSpreadsheetData();
       closeModal();
@@ -193,15 +191,12 @@ const useData = () => {
 
     try {
       setLoading(true);
-      const response = await axios.put(
-        "https://whapplied-client.vercel.app/api/v1/data/archive-item",
-        {
-          ...apiOptions,
-          id,
-          rowData: rowDataFlat[0],
-          diffValues: diffValues,
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/api/v1/data/archive-item`, {
+        ...apiOptions,
+        id,
+        rowData: rowDataFlat[0],
+        diffValues: diffValues,
+      });
 
       setLoading(true);
       await getSpreadsheetData();
@@ -282,7 +277,7 @@ const useData = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        "https://whapplied-client.vercel.app/api/v1/data/archive-multiple-items",
+        `${BASE_URL}/api/v1/data/archive-multiple-items`,
         {
           ...apiOptions,
           ids: manyRowsClicked,

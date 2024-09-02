@@ -13,6 +13,9 @@ const useSelected = (rowDetails) => {
   const [isLoadingUI, setIsLoadingUI] = useState(false);
   const [errorUI, setErrorUI] = useState(false);
   const { getSpreadsheetData } = useData();
+  const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
+
+  const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
 
   const sendSelectedToAPI = useCallback(
     async (options) => {
@@ -22,7 +25,7 @@ const useSelected = (rowDetails) => {
         setErrorUI(false);
         setIsLoadingUI(true);
         const response = await axios.post(
-          "https://whapplied-client.vercel.app/api/v1/data/update-status",
+          `${BASE_URL}/api/v1/data/update-status`,
           {
             accessToken: user.accessToken,
             spreadSheetId: user.spreadSheetId,
