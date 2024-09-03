@@ -57,10 +57,10 @@ export class AuthService implements IAuthService {
           // const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
           credentials: "include",
           headers: {
-            Accept: "application/json",
+            // Accept: "application/json",
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
+            // "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Credentials": "true",
           },
         }
       );
