@@ -7,15 +7,17 @@ const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
 
 export class AuthService implements IAuthService {
   login(): void {
-    window.location.href = `https://whapplied-server.vercel.app/api/v1/auth/google`;
+    window.location.href = `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/google`;
+    // window.location.href = `https://whapplied-server.vercel.app/api/v1/auth/google`;
     // window.location.href = `${BASE_URL}/api/v1/auth/google`;
   }
 
   async logout(): Promise<void> {
     try {
       const response = await fetch(
-        `https://whapplied-server.vercel.app/api/v1/auth/logout`,
+        `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/logout`,
         {
+          // const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/logout`,{
           // const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
           method: "GET",
           credentials: "include",
@@ -32,6 +34,7 @@ export class AuthService implements IAuthService {
 
   // async checkAuthStatus(): Promise<IUser | null> {
   //   try {
+  //     const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
   //     const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
   //       method: "GET",
   //       credentials: "include",
@@ -51,25 +54,34 @@ export class AuthService implements IAuthService {
     console.log(BASE_URL);
     try {
       const response = await fetch(
-        `https://whapplied-server.vercel.app/api/v1/auth/me`,
+        `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/me`,
+        // `https://whapplied-server.vercel.app/api/v1/auth/me`,
         {
           method: "GET",
-          // const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
           credentials: "include",
           headers: {
-            // Accept: "application/json",
+            Accept: "application/json",
             "Content-Type": "application/json",
-            // "Access-Control-Allow-Origin": "*",
-            // "Access-Control-Allow-Credentials": "true",
           },
         }
       );
+      // const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
+      //   method: "GET",
+      //   credentials: "include",
+      //   headers: {
+      //     // Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //     // "Access-Control-Allow-Origin": "*",
+      //     // "Access-Control-Allow-Credentials": "true",
+      //   },
+      // });
 
       // if (!response.ok) {
       //   if (response.status === 401) {
       //     console.log("Token has expired, attempting to refresh...");
       //     // Intentamos forzar la revalidación si se recibe un 401
       //     // El middleware del backend debería revalidar y devolver un nuevo token
+      //     const refreshResponse = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
       //     const refreshResponse = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
       //       method: "GET",
       //       credentials: "include",

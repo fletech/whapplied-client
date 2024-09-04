@@ -15,7 +15,6 @@ const useData = () => {
 
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  console.log(user);
   const {
     tableData,
     updateTableState,

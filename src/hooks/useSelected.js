@@ -15,7 +15,7 @@ const useSelected = (rowDetails) => {
   const { getSpreadsheetData } = useData();
   const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
 
-  const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
+  const BASE_URL = "";
 
   const sendSelectedToAPI = useCallback(
     async (options) => {
