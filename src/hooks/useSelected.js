@@ -15,7 +15,7 @@ const useSelected = (rowDetails) => {
   const { getSpreadsheetData } = useData();
   const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
 
-  const BASE_URL = "";
+  const BASE_URL = VITE_API_BASE_URL;
 
   const sendSelectedToAPI = useCallback(
     async (options) => {
@@ -35,7 +35,8 @@ const useSelected = (rowDetails) => {
               (item) => item.id === rowId
             )[0],
             diffValues: diffValues,
-          }
+          },
+          { withCredentials: true }
         );
 
         // const updatedLogs = JSON.parse(response.data[1].config.body).values[0];

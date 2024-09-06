@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import axios from "axios";
 import { IAuthService, IUser } from "../types/interfaces";
 
 const { VITE_API_BASE_URL, VITE_ENV } = import.meta.env;
@@ -35,79 +36,29 @@ export class AuthService implements IAuthService {
     }
   }
 
-  // async checkAuthStatus(): Promise<IUser | null> {
-  //   try {
-  //     const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
-  //     const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     return response.ok ? ((await response.json()).user as IUser) : null;
-  //   } catch (error) {
-  //     console.error("Error checking auth status:", error);
-  //     return null;
-  //   }
-  // }
   async checkAuthStatus(): Promise<IUser | null> {
     try {
-      const response = await fetch(
-        // `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/me`,
-        // `https://whapplied-server.vercel.app/api/v1/auth/me`,
-        `${BASE_URL}/api/v1/auth/me`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-      // const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
-      //   method: "GET",
-      //   credentials: "include",
-      //   headers: {
-      //     // Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //     // "Access-Control-Allow-Origin": "*",
-      //     // "Access-Control-Allow-Credentials": "true",
-      //   },
-      // });
+      console.log("Checking auth status...");
+      const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
 
-      // if (!response.ok) {
-      //   if (response.status === 401) {
-      //     console.log("Token has expired, attempting to refresh...");
-      //     // Intentamos forzar la revalidación si se recibe un 401
-      //     // El middleware del backend debería revalidar y devolver un nuevo token
-      //     const refreshResponse = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
-      //     const refreshResponse = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/me`, {
-      //       method: "GET",
-      //       credentials: "include",
-      //       headers: {
-      //         Accept: "application/json",
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-
-      //     if (refreshResponse.ok) {
-      //       return (await refreshResponse.json()).user as IUser;
-      //     } else {
-      //       return null;
-      //     }
-      //   }
-      //   return null;
-      // }
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
 
       if (!response.ok) {
+        console.log("Auth check failed");
         return null;
       }
 
-      return (await response.json()).user as IUser;
+      const data = await response.json();
+      console.log("Auth check successful:", data);
+      return data.user as IUser;
     } catch (error) {
       console.error("Error checking auth status:", error);
       return null;

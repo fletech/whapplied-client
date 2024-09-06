@@ -117,7 +117,8 @@ const useData = () => {
           {
             ...apiOptions,
             data,
-          }
+          },
+          { withCredentials: true }
         );
 
         if (response.status !== 200) {
@@ -138,10 +139,14 @@ const useData = () => {
     // optimisticTableUpdated().filterDeletedItem(id);
     try {
       setLoading(true);
-      const response = await axios.put(`${BASE_URL}/api/v1/data/delete-item`, {
-        ...apiOptions,
-        id,
-      });
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/data/delete-item`,
+        {
+          ...apiOptions,
+          id,
+        },
+        { withCredentials: true }
+      );
       //por que tarda tanto en borrar????
 
       // setLoading(true);
@@ -164,11 +169,15 @@ const useData = () => {
     // data.logs = dataLog;
     try {
       setLoading(true);
-      const response = await axios.put(`${BASE_URL}/api/v1/data/update-row`, {
-        ...apiOptions,
-        data,
-        diffValues: diffValues,
-      });
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/data/update-row`,
+        {
+          ...apiOptions,
+          data,
+          diffValues: diffValues,
+        },
+        { withCredentials: true }
+      );
       // setLoading(true);
       getSpreadsheetData();
       closeModal();
@@ -190,12 +199,16 @@ const useData = () => {
 
     try {
       setLoading(true);
-      const response = await axios.put(`${BASE_URL}/api/v1/data/archive-item`, {
-        ...apiOptions,
-        id,
-        rowData: rowDataFlat[0],
-        diffValues: diffValues,
-      });
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/data/archive-item`,
+        {
+          ...apiOptions,
+          id,
+          rowData: rowDataFlat[0],
+          diffValues: diffValues,
+        },
+        { withCredentials: true }
+      );
 
       setLoading(true);
       await getSpreadsheetData();
@@ -283,7 +296,8 @@ const useData = () => {
           dataFiltered: dataFiltered,
           diffValues: diffValues,
           bulkAction: bulkAction,
-        }
+        },
+        { withCredentials: true }
       );
 
       await getSpreadsheetData();
