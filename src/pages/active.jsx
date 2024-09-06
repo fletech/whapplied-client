@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import TableContainer from "../components/TableContainer";
 
 import { TableContext } from "../context/tableContext";
-// const Dashboard = React.lazy(() => import('../components/Dashboard'));
 
 const ActivePage = () => {
   const { setPageFilter } = useContext(TableContext);
