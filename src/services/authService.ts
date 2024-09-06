@@ -1,32 +1,31 @@
 /// <reference types="vite/client" />
 import { IAuthService, IUser } from "../types/interfaces";
 
-const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
+const { VITE_API_BASE_URL, VITE_ENV } = import.meta.env;
 
-const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
+const BASE_URL = VITE_API_BASE_URL;
 
 export class AuthService implements IAuthService {
   login(): void {
-    window.location.href = `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/google`;
+    // window.location.href = `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/google`;
     // window.location.href = `https://whapplied-server.vercel.app/api/v1/auth/google`;
-    // window.location.href = `${BASE_URL}/api/v1/auth/google`;
+    window.location.href = `${BASE_URL}/api/v1/auth/google`;
   }
 
   async logout(): Promise<void> {
     try {
-      const response = await fetch(
-        `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/logout`,
-        {
-          // const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/logout`,{
-          // const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
+      // const response = await fetch(
+      //   `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/logout`,
+      //   {
+      // const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/logout`,{
+      const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Logout failed");
       }
@@ -55,11 +54,11 @@ export class AuthService implements IAuthService {
   //   }
   // }
   async checkAuthStatus(): Promise<IUser | null> {
-    console.log(BASE_URL);
     try {
       const response = await fetch(
-        `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/me`,
+        // `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/me`,
         // `https://whapplied-server.vercel.app/api/v1/auth/me`,
+        `${BASE_URL}/api/v1/auth/me`,
         {
           method: "GET",
           credentials: "include",

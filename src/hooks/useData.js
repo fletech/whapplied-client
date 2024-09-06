@@ -10,7 +10,7 @@ import { AuthService } from "../services/authService";
 const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
 
 const useData = () => {
-  const BASE_URL = VITE_DEVELOPMENT ? "" : VITE_API_BASE_URL;
+  const BASE_URL = VITE_API_BASE_URL;
   const [hasFetchedData, setHasFetchedData] = useState(false);
 
   const { sessionState } = useContext(SessionContext);
