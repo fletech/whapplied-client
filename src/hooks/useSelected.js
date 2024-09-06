@@ -38,10 +38,6 @@ const useSelected = (rowDetails) => {
           },
           { withCredentials: true }
         );
-
-        // const updatedLogs = JSON.parse(response.data[1].config.body).values[0];
-        // return updatedLogs;
-        console.log(response.data);
         return response.data;
       } catch (err) {
         setIsLoadingUI(false);
