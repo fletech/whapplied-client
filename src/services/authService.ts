@@ -8,17 +8,11 @@ const BASE_URL = VITE_API_BASE_URL;
 
 export class AuthService implements IAuthService {
   login(): void {
-    // window.location.href = `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/google`;
-    // window.location.href = `https://whapplied-server.vercel.app/api/v1/auth/google`;
     window.location.href = `${BASE_URL}/api/v1/auth/google`;
   }
 
   async logout(): Promise<void> {
     try {
-      // const response = await fetch(
-      //   `https://coral-app-bktni.ondigitalocean.app/api/v1/auth/logout`,
-      //   {
-      // const response = await fetch(`https://whapplied-server.vercel.app/api/v1/auth/logout`,{
       const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
         method: "GET",
         credentials: "include",
