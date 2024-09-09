@@ -272,7 +272,6 @@ const useData = () => {
       bulkAction = "archiveManyRows";
       dataFiltered = activeItems;
     }
-    console.log(dataFiltered);
     return { dataFiltered, bulkAction, isAllActive, isAllArchived, isMixed };
   };
 

@@ -35,27 +35,47 @@ import { AuthService } from "../services/authService";
 
 export const SessionContext = createContext<SessionContextType | null>(null);
 
+// export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
+//   children,
+// }) => {
+//   const [sessionState, setSessionState] = useState(() => {
+//     const storedUser = localStorage.getItem("user");
+//     return {
+//       user: storedUser ? JSON.parse(storedUser) : null,
+//       isAuthenticated: !!storedUser,
+//     };
+//   });
+
+//   const updateSessionState = useCallback((newState: Partial<SessionState>) => {
+//     setSessionState((prevState) => {
+//       const updatedState = { ...prevState, ...newState };
+//       if (updatedState.user) {
+//         localStorage.setItem("user", JSON.stringify(updatedState.user));
+//       } else {
+//         localStorage.removeItem("user");
+//       }
+//       return updatedState;
+//     });
+//   }, []);
+
+//   useEffect(() => {
+//     const checkAuth = async () => {
+//       const authService = new AuthService();
+//       const user = await authService.checkAuthStatus();
+//       updateSessionState({ user, isAuthenticated: !!user });
+//     };
+//     checkAuth();
+//   }, [updateSessionState]);
 export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [sessionState, setSessionState] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return {
-      user: storedUser ? JSON.parse(storedUser) : null,
-      isAuthenticated: !!storedUser,
-    };
+  const [sessionState, setSessionState] = useState<SessionState>({
+    user: null,
+    isAuthenticated: false,
   });
 
   const updateSessionState = useCallback((newState: Partial<SessionState>) => {
-    setSessionState((prevState) => {
-      const updatedState = { ...prevState, ...newState };
-      if (updatedState.user) {
-        localStorage.setItem("user", JSON.stringify(updatedState.user));
-      } else {
-        localStorage.removeItem("user");
-      }
-      return updatedState;
-    });
+    setSessionState((prevState) => ({ ...prevState, ...newState }));
   }, []);
 
   useEffect(() => {
