@@ -139,6 +139,7 @@ const TableRows = () => {
                           (status) => status.value === content
                         )}
                         rowDetails={rowDetails}
+                        rowId={rowDetails.hiddenContent.id}
                       />
                     )}
                   />

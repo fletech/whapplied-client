@@ -4,9 +4,15 @@ import useSelected from "../hooks/useSelected";
 import { RiCloseFill } from "react-icons/ri";
 import colourStyles from "./CustomSelectStyles";
 
-function CustomSelect({ options, value, rowDetails, onChange, defaultValue }) {
-  const { isLoadingUI, errorUI, handleStatusChange } = useSelected(rowDetails);
-
+function CustomSelect({
+  options,
+  value,
+  rowDetails,
+  onChange,
+  defaultValue,
+  rowId,
+}) {
+  const { isLoadingUI, errorUI, handleStatusChange } = useSelected();
   return (
     <div
       className="relative w-full h-auto rounded-lg"
@@ -18,7 +24,7 @@ function CustomSelect({ options, value, rowDetails, onChange, defaultValue }) {
         onChange={
           onChange
             ? onChange
-            : (selected) => handleStatusChange(selected, value)
+            : (selected) => handleStatusChange(selected, value, rowId)
         }
         styles={colourStyles}
         placeholder="Have you applied?"

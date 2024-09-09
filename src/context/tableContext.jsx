@@ -151,6 +151,8 @@ export const TableProvider = ({ children }) => {
 
     const filteredData = filterDataByPage(newSortedData, pageFilter);
 
+    console.log(filteredData);
+
     updateTableState({
       sortedData: newSortedData,
       filteredData,

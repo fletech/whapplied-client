@@ -5,8 +5,7 @@ import { TableContext } from "../context/tableContext";
 import { generateLog } from "../lib/generateLog";
 import useData from "./useData";
 
-const useSelected = (rowDetails) => {
-  const rowId = rowDetails?.hiddenContent.id;
+const useSelected = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
   const { updateRowStatus, tableData } = useContext(TableContext);
@@ -18,12 +17,16 @@ const useSelected = (rowDetails) => {
   const BASE_URL = VITE_API_BASE_URL;
 
   const sendSelectedToAPI = useCallback(
-    async (options) => {
+    async (options, rowId) => {
       const { newStatus } = options;
       const [diffValues] = generateLog("updateStatus", options);
       try {
         setErrorUI(false);
         setIsLoadingUI(true);
+        const row_data = tableData.response.data.filter(
+          (item) => item.id === rowId
+        );
+
         const response = await axios.post(
           `${BASE_URL}/api/v1/data/update-status`,
           {
@@ -31,9 +34,7 @@ const useSelected = (rowDetails) => {
             spreadSheetId: user.spreadSheetId,
             id: rowId,
             status: newStatus,
-            rowData: tableData.response.data.filter(
-              (item) => item.id === rowId
-            )[0],
+            rowData: row_data[0],
             diffValues: diffValues,
           },
           { withCredentials: true }
@@ -49,7 +50,7 @@ const useSelected = (rowDetails) => {
     [user]
   );
 
-  const handleStatusChange = async (selected, previousValue) => {
+  const handleStatusChange = async (selected, previousValue, rowId) => {
     if (!rowId) {
       console.log("No rowId provided");
       return;
@@ -59,7 +60,7 @@ const useSelected = (rowDetails) => {
       previousStatus: previousValue.value,
     };
     try {
-      await sendSelectedToAPI(options);
+      await sendSelectedToAPI(options, rowId);
       await getSpreadsheetData();
       // updateRowStatus(rowId, selected.value, optimisticUpdatedLogsInDB);
       setIsLoadingUI(false);
