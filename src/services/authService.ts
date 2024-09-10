@@ -49,7 +49,7 @@ export class AuthService implements IAuthService {
       console.log("Response data:", data);
 
       if (!response.ok) {
-        console.log("Auth check failed");
+        console.log("Auth check failed ");
         return null;
       }
 
