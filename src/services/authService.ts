@@ -41,10 +41,10 @@ export class AuthService implements IAuthService {
           Accept: "application/json",
         },
       });
-
+      console.log(response);
       if (!response.ok) {
         console.log("Auth check failed");
-        return null;
+        this.checkAuthStatus();
       }
 
       const data = await response.json();

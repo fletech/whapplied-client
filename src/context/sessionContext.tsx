@@ -30,7 +30,13 @@ interface SessionContextType {
   sessionState: SessionState;
   updateSessionState: (newState: Partial<SessionState>) => void;
 }
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import { AuthService } from "../services/authService";
 
 export const SessionContext = createContext<SessionContextType | null>(null);
@@ -82,6 +88,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
     const checkAuth = async () => {
       const authService = new AuthService();
       const user = await authService.checkAuthStatus();
+      console.log("user", user);
       updateSessionState({ user, isAuthenticated: !!user });
     };
     checkAuth();
@@ -95,7 +102,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 export const useSession = () => {
-  const context = React.useContext(SessionContext);
+  const context = useContext(SessionContext);
   if (!context) {
     throw new Error("useSession must be used within a SessionProvider");
   }
