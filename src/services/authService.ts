@@ -41,15 +41,25 @@ export class AuthService implements IAuthService {
           Accept: "application/json",
         },
       });
-      console.log(response);
-      if (!response.ok) {
-        console.log("Auth check failed");
-        this.checkAuthStatus();
-      }
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
 
       const data = await response.json();
-      console.log("Auth check successful:", data);
-      return data.user as IUser;
+      console.log("Response data:", data);
+
+      if (!response.ok) {
+        console.log("Auth check failed");
+        return null;
+      }
+
+      if (data && data.user) {
+        console.log("Auth check successful:", data.user);
+        return data.user as IUser;
+      } else {
+        console.log("No user data in response");
+        return null;
+      }
     } catch (error) {
       console.error("Error checking auth status:", error);
       return null;
