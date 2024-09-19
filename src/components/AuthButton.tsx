@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { SessionContext } from "../context/sessionContext";
 import { MdLogout } from "react-icons/md";
+import { AuthService } from "../services/authService";
 
 const styles = {
   small: "text-xs text-gray-500",
@@ -9,24 +10,31 @@ const styles = {
 };
 
 const AuthButton = ({ type }) => {
-  const { sessionState } = useContext(SessionContext);
+  const { login, logout, user } = useAuth();
+  const authService = new AuthService();
 
-  const isLoggedIn = sessionState.user !== null;
+  const isLoggedIn = user !== null;
 
-  const { login, logout } = useAuth();
   const action = isLoggedIn ? logout : login;
   const label = isLoggedIn ? "Sign out" : "Sign in with Google";
 
+  if (!isLoggedIn) {
+    return (
+      <a href={authService.login()} className={styles[type]}>
+        <img src="/web_light_sq_ctn.svg" />
+      </a>
+    );
+  }
+
   return (
-    <button onClick={action} className={styles[type]}>
-      {!isLoggedIn && <img src="/web_light_sq_ctn.svg" />}
+    <a href={authService.logout()} className={styles[type]}>
       {isLoggedIn && (
         <span className="flex items-center">
           <MdLogout />
           <p className="ml-2">{label}</p>
         </span>
       )}
-    </button>
+    </a>
   );
 };
 

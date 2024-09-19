@@ -51,7 +51,7 @@ export interface ITable {
 
 export interface IAuthService {
   login(): void;
-  logout(): Promise<void>;
+  logout(): string;
   checkAuthStatus(): Promise<IUser | null>;
 }
 

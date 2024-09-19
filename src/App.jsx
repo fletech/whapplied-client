@@ -10,6 +10,7 @@ import ArchivedPage from "./pages/archived.jsx";
 import ActivePage from "./pages/active.jsx";
 import RejectedPage from "./pages/rejected.jsx";
 import AuthGuard from "./components/AuthGuard.jsx";
+import getGoogleOAuthUrl from "./utils/getGoogleUrl.ts";
 
 function App() {
   return (

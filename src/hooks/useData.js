@@ -34,6 +34,8 @@ const useData = () => {
     user: user,
   };
 
+  console.log("apiOptions", apiOptions);
+
   // const generateLog = (action, options) => {
   //   let newLog = {
   //     timestamp: Date.now(),
