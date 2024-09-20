@@ -15,6 +15,7 @@ import React, {
   useContext,
 } from "react";
 import { authService } from "../services/authService";
+import Cookies from "js-cookie";
 
 export const SessionContext = createContext<SessionContextType | null>(null);
 
@@ -38,7 +39,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
     const unsubscribe = authService.onAuthStatusChanged((user) => {
       updateSessionState({ user, isAuthenticated: !!user });
     });
-
+    console.log(Cookies.get("accessToken"));
     checkAuth();
 
     return () => {
