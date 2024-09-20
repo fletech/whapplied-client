@@ -32,11 +32,18 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const checkAuth = async () => {
-      const user = await authService.checkAuthStatus();
-      console.log("user", user);
-      updateSessionState({ user, isAuthenticated: !!user });
+      await authService.checkAuthStatus();
     };
+
+    const unsubscribe = authService.onAuthStatusChanged((user) => {
+      updateSessionState({ user, isAuthenticated: !!user });
+    });
+
     checkAuth();
+
+    return () => {
+      unsubscribe();
+    };
   }, [updateSessionState]);
 
   return (
