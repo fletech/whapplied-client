@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { SessionContext } from "../context/sessionContext";
 import { MdLogout } from "react-icons/md";
-import { AuthService } from "../services/authService";
+import { authService } from "../services/authService";
 
 const styles = {
   small: "text-xs text-gray-500 hover:text-gray-700 cursor-pointer",
@@ -11,7 +11,6 @@ const styles = {
 
 const AuthButton = ({ type }) => {
   const { login, logout, user } = useAuth();
-  const authService = new AuthService();
 
   const isLoggedIn = user !== null;
 

@@ -53,6 +53,7 @@ export interface IAuthService {
   login(): void;
   logout(): string;
   checkAuthStatus(): Promise<IUser | null>;
+  onAuthStatusChanged(callback: (user: IUser | null) => void): void;
 }
 
 export interface ISessionState {

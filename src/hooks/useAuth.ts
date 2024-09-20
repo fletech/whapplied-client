@@ -64,33 +64,29 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../context/sessionContext";
-import { AuthService } from "../services/authService";
-
-const authService = new AuthService();
+import { authService } from "../services/authService";
 
 export const useAuth = () => {
   const { sessionState, updateSessionState } = useSession();
-  const navigate = useNavigate();
 
   const login = useCallback(async () => {
     try {
-      await authService.login();
-      const userData = await authService.checkAuthStatus();
-      updateSessionState({ user: userData, isAuthenticated: true });
+      authService.login();
+      // const userData = await authService.checkAuthStatus();
+      // updateSessionState({ user: userData, isAuthenticated: true });
     } catch (error) {
       console.error("Login error:", error);
     }
   }, [updateSessionState]);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(() => {
     try {
-      await authService.logout();
       updateSessionState({ user: null, isAuthenticated: false });
-      navigate("/");
+      authService.logout();
     } catch (error) {
       console.error("Logout error:", error);
     }
-  }, [updateSessionState, navigate]);
+  }, [updateSessionState]);
 
   return {
     user: sessionState.user,

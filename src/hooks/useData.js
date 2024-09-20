@@ -6,7 +6,7 @@ import useModal from "./useModal";
 import { useAuth } from "./useAuth";
 import { generateLog } from "../lib/generateLog";
 import { redirect } from "react-router-dom";
-import { AuthService } from "../services/authService";
+import { authService } from "../services/authService";
 const { VITE_API_BASE_URL, VITE_DEVELOPMENT } = import.meta.env;
 
 const useData = () => {
@@ -68,7 +68,7 @@ const useData = () => {
       (error.response.status === 401 || error.response.status === 400)
     ) {
       try {
-        await AuthService.checkAuthStatus(); // Intenta refrescar el token
+        await authService.checkAuthStatus(); // Intenta refrescar el token
         return true; // Indica que se debe reintentar la solicitud
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
