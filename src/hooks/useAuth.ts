@@ -70,13 +70,7 @@ export const useAuth = () => {
   const { sessionState, updateSessionState } = useSession();
 
   const login = useCallback(async () => {
-    try {
-      authService.login();
-      // const userData = await authService.checkAuthStatus();
-      // updateSessionState({ user: userData, isAuthenticated: true });
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+    authService.login();
   }, [updateSessionState]);
 
   const logout = useCallback(() => {
