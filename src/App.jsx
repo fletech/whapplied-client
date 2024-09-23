@@ -23,33 +23,33 @@ function App() {
               <Route
                 path="/overview"
                 element={
-                  <AuthGuard>
-                    <OverviewPage />
-                  </AuthGuard>
+                  // <AuthGuard>
+                  <OverviewPage />
+                  // </AuthGuard>
                 }
               />
               <Route
                 path="/archived"
                 element={
-                  <AuthGuard>
-                    <ArchivedPage />
-                  </AuthGuard>
+                  // <AuthGuard>
+                  <ArchivedPage />
+                  // </AuthGuard>
                 }
               />
               <Route
                 path="/rejected"
                 element={
-                  <AuthGuard>
-                    <RejectedPage />
-                  </AuthGuard>
+                  // <AuthGuard>
+                  <RejectedPage />
+                  // </AuthGuard>
                 }
               />
               <Route
                 path="/active"
                 element={
-                  <AuthGuard>
-                    <ActivePage />
-                  </AuthGuard>
+                  // <AuthGuard>
+                  <ActivePage />
+                  // </AuthGuard>
                 }
               />
             </Routes>

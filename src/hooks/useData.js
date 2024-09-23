@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { SessionContext } from "../context/sessionContext";
 import { TableContext } from "../context/tableContext";
 import useModal from "./useModal";
-import { useAuth } from "./useAuth";
+
 import { generateLog } from "../lib/generateLog";
 import { redirect } from "react-router-dom";
 import { authService } from "../services/authService";
@@ -26,7 +26,6 @@ const useData = () => {
     rowData,
   } = useContext(TableContext);
   const { closeModal } = useModal();
-  // const { handleApiError } = useAuth();
 
   const apiOptions = {
     accessToken: user?.accessToken,

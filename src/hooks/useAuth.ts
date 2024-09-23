@@ -61,13 +61,13 @@
 
 //   return { login, logout, checkAuthStatus, handleApiError };
 // };
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSession } from "../context/sessionContext";
+import { SessionContext, useSession } from "../context/sessionContext";
 import { authService } from "../services/authService";
 
 export const useAuth = () => {
-  const { sessionState, updateSessionState } = useSession();
+  const { sessionState, updateSessionState } = useContext(SessionContext);
 
   const login = useCallback(async () => {
     authService.login();

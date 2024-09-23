@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useAuth } from "../hooks/useAuth";
+
 import { SessionContext } from "../context/sessionContext";
 import { MdLogout } from "react-icons/md";
 import { authService } from "../services/authService";
@@ -10,11 +10,9 @@ const styles = {
 };
 
 const AuthButton = ({ type }) => {
-  const { login, logout, user } = useAuth();
+  const { sessionState } = useContext(SessionContext);
+  const isLoggedIn = sessionState?.user !== null;
 
-  const isLoggedIn = user !== null;
-
-  const action = isLoggedIn ? logout : login;
   const label = isLoggedIn ? "Sign out" : "Sign in with Google";
 
   if (!isLoggedIn) {

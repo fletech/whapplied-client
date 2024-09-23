@@ -226,17 +226,39 @@ const HomePage = () => {
       </div>
     );
   }
+
+  if (!user) {
+    return <Home />;
+  }
   return (
     <section className="HomePage flex flex-col items-center justify-start h-full ">
       {!user && <Home />}
-      <div className="flex flex-col items-center justify-center h-auto">
+      {/* <div className="flex flex-col items-center justify-center h-auto">
         <Heading user={user} />
+      </div> */}
+      <div className=" w-full bg-base-100 flex flex-col items-start justify-start">
+        <div className="card-body">
+          <h2 className="card-title text-xl">Summary of applications</h2>
+          <p className="text-md font-light mt-4">
+            Total applications made:
+            <span className="font-bold ">
+              {tableData.response?.data.length}
+            </span>
+          </p>
+          <p className="text-md font-light">
+            Positions applied:{" "}
+            <span className="font-bold ">
+              {
+                tableData.response?.data.filter(
+                  (item) => item.status === "applied"
+                ).length
+              }
+            </span>
+          </p>
+        </div>
       </div>
       {user && tableData.response && (
         <>
-          <h2 className="text-sm self-start text-custom-blue text-left w-auto mx-8  mt-8 rounded-full bg-custom-blue/10 px-4 py-2">
-            Summary
-          </h2>
           <div className="grid grid-cols-2 gap-4 mt-8 text-soft-black ">
             <ChartCard
               title="Candidatures by status"
@@ -254,27 +276,6 @@ const HomePage = () => {
               openRef={open2Ref}
               setModalState={setModalState}
             />
-            <div className="card w-full bg-base-100 shadow-lg  rounded-lg border border-gray flex flex-col items-start justify-start">
-              <div className="card-body p-8 ">
-                <h2 className="card-title text-xl">Summary of applications</h2>
-                <p className="text-md font-light mt-4">
-                  Total applications made:
-                  <span className="font-bold text-custom-blue">
-                    {tableData.response.data.length}
-                  </span>
-                </p>
-                <p className="text-md font-light">
-                  Positions applied:{" "}
-                  <span className="font-bold text-custom-blue">
-                    {
-                      tableData.response.data.filter(
-                        (item) => item.status === "applied"
-                      ).length
-                    }
-                  </span>
-                </p>
-              </div>
-            </div>
           </div>
         </>
       )}

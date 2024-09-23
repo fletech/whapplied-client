@@ -50,7 +50,7 @@ export interface ITable {
 }
 
 export interface IAuthService {
-  login(): void;
+  login(): string;
   logout(): string;
   checkAuthStatus(): Promise<IUser | null>;
   onAuthStatusChanged: (callback: (user: IUser | null) => void) => () => void;
