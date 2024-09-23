@@ -57,6 +57,7 @@
 import { EventEmitter } from "events";
 import { IAuthService, IUser } from "../types/interfaces";
 import getGoogleOAuthUrl from "../utils/getGoogleUrl";
+import Cookies from "js-cookie";
 
 const { VITE_API_BASE_URL } = import.meta.env;
 const BASE_URL = VITE_API_BASE_URL;
@@ -71,6 +72,8 @@ export function createAuthService(): IAuthService {
   };
 
   const logout = (): string => {
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     return getGoogleOAuthUrl().logout;
   };
 
