@@ -30,7 +30,6 @@ const useSelected = () => {
         const response = await axios.post(
           `${BASE_URL}/api/v1/data/update-status`,
           {
-            accessToken: user.accessToken,
             spreadSheetId: user.spreadSheetId,
             id: rowId,
             status: newStatus,
