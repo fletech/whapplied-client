@@ -78,22 +78,45 @@ export function createAuthService(): IAuthService {
   };
 
   const checkAuthStatus = async (): Promise<IUser | null> => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const data = await response.json();
-      return data.user || null;
-    } catch (error) {
-      console.error("Error checking auth status:", error);
-      return null;
+    if (isCheckingAuth) {
+      return authCheckPromise;
     }
+
+    isCheckingAuth = true;
+    authCheckPromise = new Promise(async (resolve) => {
+      try {
+        console.log("Checking auth status...");
+        const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data && data.user) {
+          console.log("Auth check successful:", data.user);
+          authEventEmitter.emit("authStatusChanged", data.user);
+          resolve(data.user as IUser);
+        } else {
+          console.log("Auth check failed");
+          authEventEmitter.emit("authStatusChanged", null);
+          resolve(null);
+        }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+        authEventEmitter.emit("authStatusChanged", null);
+        resolve(null);
+      } finally {
+        isCheckingAuth = false;
+        authCheckPromise = null;
+      }
+    });
+
+    return authCheckPromise;
   };
 
   const onAuthStatusChanged = (callback: (user: IUser | null) => void) => {
