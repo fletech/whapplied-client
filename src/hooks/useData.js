@@ -26,14 +26,13 @@ const useData = () => {
     rowData,
   } = useContext(TableContext);
   const { closeModal } = useModal();
+  const accessToken = localStorage.getItem("accessToken");
 
   const apiOptions = {
-    accessToken: user?.accessToken,
+    refreshToken: localStorage.getItem("refreshToken"),
     spreadSheetId: user?.spreadSheetId,
     user: user,
   };
-
-  console.log("apiOptions", apiOptions);
 
   // const generateLog = (action, options) => {
   //   let newLog = {
@@ -71,7 +70,7 @@ const useData = () => {
         return true; // Indica que se debe reintentar la solicitud
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
-        logout(); // Si no se puede refrescar, cierra la sesión
+        // logout(); // Si no se puede refrescar, cierra la sesión
         return false;
       }
     }
@@ -83,7 +82,11 @@ const useData = () => {
       const response = await axios.post(
         `${BASE_URL}/api/v1/data/spreadsheet-data`,
         apiOptions,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       updateTableState({
@@ -119,7 +122,11 @@ const useData = () => {
             ...apiOptions,
             data,
           },
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
 
         if (response.status !== 200) {
@@ -146,7 +153,11 @@ const useData = () => {
           ...apiOptions,
           id,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       //por que tarda tanto en borrar????
 
@@ -177,7 +188,11 @@ const useData = () => {
           data,
           diffValues: diffValues,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       // setLoading(true);
       getSpreadsheetData();
@@ -208,7 +223,11 @@ const useData = () => {
           rowData: rowDataFlat[0],
           diffValues: diffValues,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       setLoading(true);
@@ -297,7 +316,11 @@ const useData = () => {
           diffValues: diffValues,
           bulkAction: bulkAction,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       await getSpreadsheetData();

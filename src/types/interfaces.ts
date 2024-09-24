@@ -51,9 +51,11 @@ export interface ITable {
 
 export interface IAuthService {
   login(): string;
-  logout(): string;
+  logout(): Promise<void>;
   checkAuthStatus(): Promise<IUser | null>;
-  onAuthStatusChanged: (callback: (user: IUser | null) => void) => () => void;
+
+  refreshToken(): Promise<boolean>;
+  setTokens(accessToken: string, refreshToken: string): void;
 }
 
 export interface ISessionState {

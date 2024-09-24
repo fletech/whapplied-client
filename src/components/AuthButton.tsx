@@ -17,21 +17,21 @@ const AuthButton = ({ type }) => {
 
   if (!isLoggedIn) {
     return (
-      <a href={authService.login()} className={styles[type]}>
+      <button onClick={() => authService.login()} className={styles[type]}>
         <img src="/web_light_sq_ctn.svg" />
-      </a>
+      </button>
     );
   }
 
   return (
-    <a href={authService.logout()} className={styles[type]}>
+    <button onClick={() => authService.logout()} className={styles[type]}>
       {isLoggedIn && (
         <span className="flex items-center">
           <MdLogout />
           <p className="ml-2">{label}</p>
         </span>
       )}
-    </a>
+    </button>
   );
 };
 

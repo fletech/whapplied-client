@@ -26,7 +26,7 @@ const useSelected = () => {
         const row_data = tableData.response.data.filter(
           (item) => item.id === rowId
         );
-
+        const accessToken = localStorage.getItem("accessToken");
         const response = await axios.post(
           `${BASE_URL}/api/v1/data/update-status`,
           {
@@ -36,7 +36,11 @@ const useSelected = () => {
             rowData: row_data[0],
             diffValues: diffValues,
           },
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
         return response.data;
       } catch (err) {

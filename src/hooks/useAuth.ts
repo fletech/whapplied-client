@@ -76,7 +76,8 @@ export const useAuth = () => {
   const logout = useCallback(() => {
     try {
       updateSessionState({ user: null, isAuthenticated: false });
-      authService.logout();
+      console.log("está entrando acá");
+      // authService.logout();
     } catch (error) {
       console.error("Logout error:", error);
     }

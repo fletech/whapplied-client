@@ -206,7 +206,6 @@ const ChartCard = ({ title, chartType, data, options, openRef }) => {
 const HomePage = () => {
   const { sessionState } = useContext(SessionContext);
   const { user } = sessionState;
-  console.log("user", user);
 
   const { tableData, loading, setModalState, modalState, setPageFilter } =
     useContext(TableContext);

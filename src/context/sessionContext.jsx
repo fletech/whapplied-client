@@ -1,12 +1,3 @@
-interface SessionState {
-  user: any | null;
-  isAuthenticated: boolean;
-}
-
-type SessionContextType = {
-  sessionState: SessionState;
-  updateSessionState: (newState: Partial<SessionState>) => void;
-} | null;
 import React, {
   createContext,
   useState,
@@ -15,19 +6,16 @@ import React, {
   useContext,
 } from "react";
 import { authService } from "../services/authService";
-import Cookies from "js-cookie";
 
-export const SessionContext = createContext<SessionContextType>(null);
+export const SessionContext = createContext();
 
-export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [sessionState, setSessionState] = useState<SessionState>({
+export const SessionProvider = ({ children }) => {
+  const [sessionState, setSessionState] = useState({
     user: null,
     isAuthenticated: false,
   });
 
-  const updateSessionState = useCallback((newState: Partial<SessionState>) => {
+  const updateSessionState = useCallback((newState) => {
     setSessionState((prevState) => ({ ...prevState, ...newState }));
   }, []);
 
@@ -48,17 +36,10 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    const unsubscribe = authService.onAuthStatusChanged((user) => {
-      if (isMounted) {
-        updateSessionState({ user, isAuthenticated: !!user });
-      }
-    });
-
     checkAuth();
 
     return () => {
       isMounted = false;
-      unsubscribe();
     };
   }, [updateSessionState]);
 
