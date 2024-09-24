@@ -221,7 +221,6 @@ export const authService: IAuthService = {
           Authorization: `Bearer ${storedAccessToken}`,
         },
       });
-      console.log("Response status:", response.status);
       if (!response.ok) {
         console.log("Auth check failed");
         if (response.status === 401) {
@@ -237,6 +236,7 @@ export const authService: IAuthService = {
       }
 
       const data = await response.json();
+
       return data.user;
     } catch (error) {
       console.error("Error checking auth status:", error);
